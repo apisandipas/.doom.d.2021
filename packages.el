@@ -6,6 +6,7 @@
 ;; use 'M-x doom/reload'.
 
 (package! one-themes)
+(package! elfeed-goodies)
 (package! visual-fill-column)
 (package! org-bullets)
 (package! dashboard)
