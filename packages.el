@@ -7,12 +7,21 @@
 
 (package! one-themes)
 (package! elfeed-goodies)
+(package! org-super-agenda)
 (package! visual-fill-column)
-(package! org-bullets)
+(package! org-superstar)
 (package! dashboard)
+(package! ligature
+  :recipe
+  (:host github
+   :repo "mickeynp/ligature.el"))
 
-
-
+(package! exwm)
+(package! desktop-environment)
+(package! exwm-outer-gaps
+  :recipe
+  (:host github
+   :repo "lucasgruss/exwm-outer-gaps"))
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 
