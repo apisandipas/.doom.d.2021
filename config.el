@@ -19,8 +19,22 @@
 (custom-set-faces!
         '(font-lock-comment-face :slant italic)
         '(font-lock-keyword-face :slant italic))
+
+(setq prettify-symbols-alist
+  (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+          '(("#+begin_src" . ?)
+            ("#+end_src" . ?ﰵ)
+            ("#+begin_example" . ?)
+            ("#+end_example" . ?)
+            ("#+header:" . ?)
+            ("#+name:" . ?﮸)
+            ("#+results:" . ?)
+            ("#+call:" . ?)
+            (":properties:" . ?)
+            (":logbook:" . ?))))
+(prettify-symbols-mode)
+
 (use-package ligature
-  :load-path "path-to-ligature-repo"
   :config
   (ligature-set-ligatures
         'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
@@ -36,11 +50,32 @@
         "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
         "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
         "\\\\" "://"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
-(setq doom-theme 'doom-opera)
+(setq split-height-threshold nil)
+(setq split-width-threshold 0)
+
+(use-package all-the-icons-ivy
+  :after (all-the-icons ivy)
+  :custom (all-the-icons-ivy-buffer-commands '(ivy-switch-buffer-other-window))
+  :config
+  (add-to-list 'all-the-icons-ivy-file-commands 'counsel-dired-jump)
+  (add-to-list 'all-the-icons-ivy-file-commands 'counsel-find-library)
+  (all-the-icons-ivy-setup))
+
+(use-package ivy-posframe
+  :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  (ivy-posframe-mode 1))
+
+;; (setq doom-theme 'doom-one)
+;; (setq doom-theme 'one-dark)
+(setq doom-theme 'doom-gruvbox-light)
+
+(defun bp/fill-visual-column ()
+    (setq visual-fill-column-center-text t
+        visual-fill-column-width 100)
+    (visual-fill-column-mode 1))
 
 (use-package dashboard
         :init
@@ -48,17 +83,16 @@
         (setq dashboard-set-file-icons t)
         (setq dashboard-week-agenda nil)
         (setq dashboard-startup-banner "~/.doom.d/banners/gnu.png")
+        (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+        ;; (add-hook 'window-setup-hook #'treemacs 'append)
         :config
         (dashboard-setup-startup-hook))
 
 (after! visual-fill-column
-  (add-hook! dashboard-mode
-    (setq visual-fill-column-center-text t
-        visual-fill-column-width 200)
-    (visual-fill-column-mode 1)))
+  (add-hook! dashboard-mode-hook 'bp/fill-visual-column))
 
-(set-frame-parameter (selected-frame)'alpha '(90 . 90))
-(add-to-list 'default-frame-alist'(alpha . (90 . 90)))
+(set-frame-parameter (selected-frame)'alpha '(75 . 80))
+(add-to-list 'default-frame-alist'(alpha . (75 . 80)))
 
 (setq display-line-numbers-type 'relative)
 
@@ -75,7 +109,7 @@
         org-directory "~/org/"
         org-ellipsis " ▼ "
         org-default-notes-file (expand-file-name
-                                "Notes.org" org-directory)
+                                "notes.org" org-directory)
         org-log-done 'time
         org-hide-emphasis-markers t))
 
@@ -86,43 +120,59 @@
         org-agenda-skip-deadline-if-done t
         org-agenda-include-deadlines t
         org-super-agenda-header-separator "\n"
-        org-agenda-block-separator nil
-        org-agenda-compact-blocks nil
+        ;; org-agenda-block-separator nil
+        ;; org-agenda-compact-blocks nil
         org-agenda-start-day nil
         org-agenda-span 10
         org-super-agenda-hide-empty-groups nil
         org-agenda-start-on-weekday nil)
+  (setq org-tag-alist '(("URGENT" . ?u)
+                         ("@Health" . ?h)
+                         ("@Self" . ?s)
+                         ("@Love" . ?l)
+                         ("@Home" . ?h)
+                         ("@Family" . ?f)
+                         ("@Community" . ?c)
+                         ("project" . ?P)
+                         ("task" . ?T)
+                         ("chore" . ?C)
+                         ("bill" . ?B)
+                         ("appointment" . ?A)
+                         ))
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "IN-PROGRSS(i)" "BLOCKED(b)" "|" "DONE(d)")
+        '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)")
           (type "[ ](c)" "PROJ(p)" "SOMEDAY(s)" "LOOP(r)" "|" "[x](x)")
-          (sequence "|" "CANCELED")))
+          (sequence "|" "CANCELLED")))
   (setq org-agenda-custom-commands
         '(
           ("c" "💎 FACETS"
            ((alltodo ""
-                     ((org-agenda-overriding-header "\n 💎 FACETS ")
-                      (org-super-agenda-groups
-                       '((:log t)
-                         (:name "🏥 Health"
-                          :tag "@Health"
-                          :order 3)
-                         (:name "🕹 Self"
-                          :tag "@Self"
-                          :order 4)
-                         (:name "🫂 Love"
-                          :tag "@Love"
-                          :order 5)
-                         (:name "🏠 Home"
-                          :tag "@Home"
-                          :order 6)
-                         (:name "🤝 Community"
-                          :tag "@Community"
-                          :order 7)
+                ((org-agenda-overriding-header "\n 💎 FACETS ")
+                (org-super-agenda-groups
+                '((:log t)
+                    (:name "🏥 Health"
+                    :tag "@Health"
+                    :order 3)
+                    (:name "🕹 Self"
+                    :tag "@Self"
+                    :order 4)
+                    (:name "🫂 Love"
+                    :tag "@Love"
+                    :order 5)
+                    (:name "🏠 Home"
+                    :tag "@Home"
+                    :order 6)
+                    (:name "🏠 Home"
+                    :tag "@Home"
+                    :order 7)
+                    (:name "🤝 Community"
+                    :tag "@Community"
+                    :order 8)
 
-                         (:discard (:not (:todo "TODO")))))))))
+                    (:discard (:not (:todo "TODO")))))))))
 
-          ("g" " GTD"
-           ((alltodo "" ((org-agenda-overriding-header "\n GTD ")
+          ("g" "💪 GTD"
+           ((alltodo "" ((org-agenda-overriding-header "\n 💪 GTD ")
                          (org-super-agenda-groups
                           '((:log t)
                             (:name "In Progress"
@@ -159,16 +209,13 @@
 
 (after! org
   (setq org-journal-dir "~/org/journal/"
-        org-journal-date-prefix ""
-        org-journal-time-prefix ""
+        org-journal-date-prefix " "
+        org-journal-time-prefix " "
         org-journal-date-format "%B %d, %Y (%A) "
         org-journal-file-format "%Y-%m-%d.org"))
 
-(use-package visual-fill-column)
 (after! visual-fill-column
-  (add-hook! org-mode
-    (setq visual-fill-column-center-text t)
-    (visual-fill-column-mode 1)))
+  (add-hook! 'org-mode-hook #'bp/fill-visual-column))
 
 (defun bp/org-font-setup ()
   ;; Set faces for heading levels
@@ -209,7 +256,9 @@
   (kbd "K") 'elfeed-goodies/split-show-prev)
 (setq elfeed-feeds (quote
     (("https://www.reddit.com/r/linux.rss" reddit linux)
-    ("https://www.reddit.com/r/unixporn.rss" reddit unixporn)   ("https://www.reddit.com/r/commandline.rss" reddit commandline)
+    ("https://www.reddit.com/r/unixporn.rss" reddit unixporn)
+    ("https://www.reddit.com/r/commandline.rss" reddit commandline)
+    ("https://www.reddit.com/r/neovim.rss" reddit neovim)
     ("https://www.reddit.com/r/vim.rss" reddit vim)
     ("https://www.reddit.com/r/distrotube.rss" reddit distrotube)
     ("https://www.reddit.com/r/emacs.rss" reddit emacs)

@@ -35,7 +35,7 @@
                                         ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
-       indent-guides     ; highlighted indent columns
+       ;; indent-guides     ; highlighted indent columns
        ligatures         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
@@ -114,7 +114,7 @@
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
        ;;cc                ; C > C++ == 1
-       ;;clojure           ; java with a lisp
+       clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
@@ -151,7 +151,7 @@
        ;;ocaml             ; an objective camel
        (org
         +dragndrop         ; drag & drop files/images into org buffers
-       ;; +hugo              ; use Emacs for hugo blogging
+        +hugo              ; use Emacs for hugo blogging
         +roam2
         +journal)        ;;organize your plain life in plain text
        php               ; perl's insecure younger brother

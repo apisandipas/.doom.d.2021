@@ -6,23 +6,42 @@
   (interactive)
   ;; NOTE: You will need to update this to a valid background path!
   (start-process-shell-command
-      "feh" nil  "~/.fehbg"))
+   "feh" nil  "~/.fehbg"))
 
+(defvar bp/polybar-process nil
+  "Holds the process of the running Polybar instance, if any")
+
+(defun bp/kill-panel ()
+  (interactive)
+  (when bp/polybar-process
+    (ignore-errors
+      (kill-process bp/polybar-process)))
+  (setq bp/polybar-process nil))
+
+(defun bp/start-panel ()
+  (interactive)
+  (bp/kill-panel)
+  (setq bp/polybar-process (start-process-shell-command "polybar" nil "~/.config/polybar/launch.sh")))
+
+(defun bp/send-polybar-hook (module-name hook-index)
+  (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
+
+(defun bp/send-polybar-exwm-workspace ()
+  (bp/send-polybar-hook "exwm-workspace" 1))
+
+;; Update panel indicator when workspace changes
+(add-hook 'exwm-workspace-switch-hook #'bp/send-polybar-exwm-workspace)
 (defun bp/exwm-init-hook ()
+  (doom-mark-buffer-as-real-h)
   ;; Make workspace 1 be the one where we land at startup
   (exwm-workspace-switch-create 1)
 
   ;; Open eshell by default
-  ;;(eshell)
-
-  ;; NOTE: The next two are disabled because we now use Polybar!
-
-  ;; Show battery status in the mode line
-  ;;(display-battery-mode 1)
+  (eshell)
 
   ;; Show the time and date in modeline
-  ;;(setq display-time-day-and-date t)
-  ;;(display-time-mode 1)
+  (setq display-time-day-and-date t)
+  (display-time-mode 1)
   ;; Also take a look at display-time-format and format-time-string
 
   ;; Start the Polybar panel
@@ -46,17 +65,17 @@
 (defun bp/position-window ()
   (let* ((pos (frame-position))
          (pos-x (car pos))
-          (pos-y (cdr pos)))
+         (pos-y (cdr pos)))
 
     (exwm-floating-move (- pos-x) (- pos-y))))
 
 (defun bp/configure-window-by-class ()
   (interactive)
   (pcase exwm-class-name
-    ("Brave" (exwm-workspace-move-window 2))
+    ("Firefox" (exwm-workspace-move-window 2))
     ("Sol" (exwm-workspace-move-window 3))
     ("spotify" (exwm-floating-toggle-floating)
-           (exwm-layout-toggle-mode-line))))
+     (exwm-layout-toggle-mode-line))))
 
 ;; This function should be used only after configuring autorandr!
 (defun bp/update-displays ()
@@ -102,7 +121,7 @@
   (require 'exwm-randr)
   (exwm-randr-enable)
   (start-process-shell-command "xrandr" nil "xrandr --output eDP-1 --mode 1920x1080  --auto\
-        --output DVI-I-1-1 --left-of eDP-1 --mode 1920x1080 --auto \
+        --output DVI-I-1-1 --rotate right --left-of eDP-1 --mode 1920x1080 --auto \
         --output DVI-I-2-2 --mode 1920x1080 --left-of DVI-I-1-1  --auto")
   ;; This will need to be updated to the name of a display!  You can find
   ;; the names of your displays by looking at arandr or the output of xrandr
@@ -131,15 +150,15 @@
 
   ;; These keys should always pass through to Emacs
   (setq exwm-input-prefix-keys
-    '(?\C-x
-      ?\C-u
-      ?\C-h
-      ?\M-x
-      ?\M-`
-      ?\M-&
-      ?\M-:
-      ?\C-\M-j  ;; Buffer list
-      ?\C-\ ))  ;; Ctrl+Space
+        '(?\C-x
+          ?\C-u
+          ?\C-h
+          ?\M-x
+          ?\M-`
+          ?\M-&
+          ?\M-:
+          ?\C-\M-j  ;; Buffer list
+          ?\C-\ ))  ;; Ctrl+Space
 
   ;; Ctrl+Q will enable the next key to be sent directly
   (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
@@ -180,7 +199,9 @@
 
 (use-package desktop-environment
   :after exwm
-  :config (desktop-environment-mode)
+  :config
+  (desktop-environment-mode)
+  (exwm-outer-gaps-mode +1)
   :custom
   (desktop-environment-brightness-small-increment "2%+")
   (desktop-environment-brightness-small-decrement "2%-")
@@ -190,29 +211,6 @@
 ;; Make sure the server is started (better to do this in your main Emacs config!)
 (server-start)
 
-(defvar bp/polybar-process nil
-  "Holds the process of the running Polybar instance, if any")
-
-(defun bp/kill-panel ()
-  (interactive)
-  (when bp/polybar-process
-    (ignore-errors
-      (kill-process bp/polybar-process)))
-  (setq bp/polybar-process nil))
-
-(defun bp/start-panel ()
-  (interactive)
-  (bp/kill-panel)
-  (setq bp/polybar-process (start-process-shell-command "polybar" nil "~/.config/polybar/launch.sh")))
-
-(defun bp/send-polybar-hook (module-name hook-index)
-  (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
-
-(defun bp/send-polybar-exwm-workspace ()
-  (bp/send-polybar-hook "exwm-workspace" 1))
-
-;; Update panel indicator when workspace changes
-(add-hook 'exwm-workspace-switch-hook #'bp/send-polybar-exwm-workspace)
 
 (defun bp/disable-desktop-notifications ()
   (interactive)
