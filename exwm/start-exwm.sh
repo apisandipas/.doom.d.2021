@@ -4,7 +4,7 @@
 
 xautolock -time 120 -locker 'betterlockscreen -l dim' &
 fix_xcursor &
-picom -b --config ~/.config/picom/picom.conf
+picom -b --config ~/.doom.d/exwm/picom.conf
 # Enable screen locking on suspend
 
 # Fire it up
