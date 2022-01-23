@@ -117,7 +117,8 @@
 
 ** Theme Selection
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-vibrant)
+;; (setq doom-theme 'doom-vibrant)
+(setq doom-theme 'modus-vivendi)
 ;; (setq doom-theme 'doom-one)
 ;; (setq doom-theme 'one-dark)
 ;; (setq doom-theme 'doom-gruvbox-light)
@@ -190,6 +191,7 @@
 
 (server-start)
 (require 'org-protocol)
+(require 'org-protocol-capture-html)
 (after! org
   (setq
    org-directory "~/org/"
@@ -209,13 +211,8 @@
       ,(concat "* TODO %?\n"
                "/Entered on/ %U"))
 
-     ;;
-     ("z" "zettle" plain (file+head "brain/umami/%<%Y%m%d%H%M%S>-${slug}.org"
-                                        "#+title: ${title}\n#+date: %U\n%i\n"))
-
-     ("p" "Protocol" entry (file+headline "inbox.org" "Inbox")
-       "* %a\nCaptured On: %U\nWebsite: %l\n\n%i\n%?"
-        )
+    ("p" "Protocol" entry (file+headline "inbox.org" "Inbox")
+       "* %a\nCaptured On: %U\nWebsite: %l\n\n%i\n%?")
 
 	 ("L" "Protocol Link" entry (file+headline "inbox.org" "Links to Checkout")
         "* %? [[%:link][%:description]] \nCaptured On: %U")
@@ -291,7 +288,9 @@
                                    :if-new (file+head "temporal/yearly/%<%Y>.org"
                                                       "#+title: %<%Y>\n#+filetags: yearly\n")
                                    :unnarrowed t))))
-(after! org
+(use-package! org-roam
+  :commands (org-roam-insert org-roam-find-file org-roam org-roam-show-graph)
+  :init
   (setq
    org-roam-v2-ack t
    bp/daily-note-filename "%<%Y-%m-%d>.org"
@@ -299,17 +298,20 @@
    org-roam-directory "~/org/brain"
    org-roam-dailies-directory "temporal/daily/"
    org-roam-completion-everywhere t
-   org-roam-capture-ref-templates '(("l" "Web site" plain (function org-roam-capture--get-point)
-                                         "${body}\n%?"
-                                         :file-name "sources/${slug}"
-                                         :head "#+title: ${title}\n#+CREATED: %U\n#+roam_key: ${ref}\n\n"
-                                         :unnarrowed t))
+   org-roam-capture-ref-templates
+        '(
+          ("r" "default" entry
+           "\n** Content\n\n #+begin_quote\n ${body}\n #+end_quote \n\n** Summary\n\n %?\n\n"
+           :if-new (file+head "sources/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n#+filetags: #sources/?? \n\nTags::\n\nSource::\n\nAuthor::\n\n* ${title}\n\n")
+           :unnarrowed t)
+          )
    org-roam-capture-templates
    `(
 
      ("w" "default" entry ""
-      :if-new (file+head "umami/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: \n\nTags::  "))
-
+      :if-new (file+head "umami/%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n#+filetags: \n\nTags::  "))
 
      ("s" "source" entry ""
       :if-new (file+head "sources/${slug}.org" "#+title: ${title}\n#+filetags: #📚 #sources/???a\n\nTags::\n\nAuthor:: \nSource:  "))
@@ -344,7 +346,10 @@
       "* %<%I:%M %p> - %^{Meeting Title}  :appointment:\n\n%?\n\n"
       :if-new (file+head+olp ,bp/daily-note-filename
                              ,bp/daily-note-header
-                             ("Log"))))))
+                             ("Log")))))
+  :config
+  (require 'org-roam-protocol)
+  )
 
 (defhydra bp/org-roam-jump-menu (:hint nil)
   "
@@ -371,8 +376,10 @@ _d_: date        ^ ^              ^ ^
       :prefix ("n" "notes")
       :desc "Journal Manager"
       "j" #'bp/org-roam-jump-menu/body)
-
 #+end_src
+
+#+RESULTS:
+: bp/org-roam-jump-menu/body
 
 ** Center Org Buffer Contents
 #+begin_src emacs-lisp
@@ -521,10 +528,8 @@ _d_: date        ^ ^              ^ ^
     :after org-roam)
 
 (use-package! org-roam-ui
+  :commands (org-roam-ui-mode)
     :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
@@ -616,4 +621,13 @@ _d_: date        ^ ^              ^ ^
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
    ))
 
+(use-package! org-gcal
+    :commands (org-gcal-sync org-gcal--sync-unlock org-gcal-post-at-point)
+    :init
+    (setq! org-gcal-auto-archive nil)
+    (setq org-gcal-client-id "1057193299633-eimgu3bm260jkisachubpf8oj1cah5nj.apps.googleusercontent.com"
+        org-gcal-client-secret "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"
+        org-gcal-fetch-file-alist '(
+                ("bparonto@gmail.com" .  "~/org/agenda.org")
+                ("4tc3t9c2hef41n7dc461idql8k@group.calendar.google.com". "~/org/agenda.org"))))
    #+end_src
