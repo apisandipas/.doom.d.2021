@@ -4,7 +4,6 @@
 
 (defun bp/set-wallpaper ()
   (interactive)
-  ;; NOTE: You will need to update this to a valid background path!
   (start-process-shell-command
    "feh" nil  "~/.fehbg"))
 
@@ -21,7 +20,7 @@
 (defun bp/start-panel ()
   (interactive)
   (bp/kill-panel)
-  (setq bp/polybar-process (start-process-shell-command "polybar" nil "sh ~/.config/polybar/launch-exwm.sh")))
+  (setq bp/polybar-process (start-process-shell-command "polybar" nil "polybar -c ~/.doom.d/exwm/polybar.config.ini --reload main")))
 
 (defun bp/send-polybar-hook (module-name hook-index)
   (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
@@ -31,16 +30,16 @@
 
 (defun bp/polybar-exwm-workspace ()
   (pcase exwm-workspace-current-index
-    (1 "dev")
-    (2 "term")
-    (3 "comms")
-    (4 "mail")
-    (5 "mt1")
-    (6 "web")
-    (7 "git")
-    (8 "mus")
-    (9 "mt2")
-    (0 "vid")
+    (1 "  Dev")
+    (2 "  Term")
+    (3 "  Chat")
+    (4 "  Mail")
+    (5 "  Data")
+    (6 "爵  Web")
+    (7 "  VCS")
+    (8 "  Music")
+    (9 "  Files")
+    (0 "  Video")
     ))
 
 ;; Update panel indicator when workspace changes
@@ -48,50 +47,14 @@
 
 (defun bp/exwm-init-hook ()
   (doom-mark-buffer-as-real-h)
-  (with-eval-after-load 'perspective
-    ;; Set up perspective names on initial workspaces
-    (exwm-workspace-switch-create 0)
-    (persp-switch "Video")
-    (persp-kill "main")
-
-    (exwm-workspace-switch-create 1)
-
-    (exwm-workspace-switch-create 2)
-    (persp-switch "Term")
-    (persp-kill "main")
-
-    (exwm-workspace-switch-create 3)
-    (persp-switch "Comms")
-    (persp-kill "main")
-
-    (exwm-workspace-switch-create 4)
-    (persp-switch "Mail")
-    (persp-kill "main")
-
-    (exwm-workspace-switch-create 5)
-
-    (exwm-workspace-switch-create 6)
-    (persp-switch "Web")
-    (persp-kill "main")
-
-    (exwm-workspace-switch-create 7)
-    (persp-switch "Git")
-    (persp-kill "main")
-
-    (exwm-workspace-switch-create 8)
-    (persp-switch "Music")
-    (persp-kill "main")
-
-    (exwm-workspace-switch-create 9)
-    )
   ;; Open eshell by default
   ;; (eshell)
 
   (exwm-outer-gaps-mode +1)
 
   ;; Show the time and date in modeline
-  (setq display-time-day-and-date t)
-  (display-time-mode 1)
+  (setq display-time-day-and-date nil)
+  (display-time-mode -1)
   ;; Also take a look at display-time-format and format-time-string
 
   ;; Start the Polybar panel
@@ -110,16 +73,13 @@
 
 (defun bp/exwm-update-title ()
   (pcase exwm-class-name
-    ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
+    ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
 
 
 (defun bp/configure-window-by-class ()
   (interactive)
   (pcase exwm-class-name
-    ("Firefox" (exwm-workspace-move-window 6))
-    ("spotify" (exwm-floating-toggle-floating)
-     (exwm-workspace-move-window 8)
-     (exwm-layout-toggle-mode-line))))
+    ("firefox" (exwm-workspace-move-window 6))))
 
 ;; This function should be used only after configuring autorandr!
 ;; (defun bp/update-displays ()

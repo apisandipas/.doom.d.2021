@@ -41,12 +41,12 @@
 (package! all-the-icons-ivy)
 (package! ivy-posframe)
 
-;; (package! mu4e-dashboard
-;;   :recipe
-;;   (:host github
-;;    :repo "rougier/mu4e-dashboard"))
+(package! mu4e-dashboard
+  :recipe
+  (:host github
+   :repo "rougier/mu4e-dashboard"))
 
-
+(package! auto-dim-other-buffers)
 ;; (when (package! eaf :recipe (:host github
 ;;                              :repo "manateelazycat/emacs-application-framework"
 ;;                              :files ("*.el" "*.py" "app" "core")

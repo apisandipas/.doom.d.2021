@@ -8,8 +8,9 @@
  '(doom-big-font-mode t t)
  '(global-svg-tag-mode t)
  '(initial-frame-alist '((fullscreen . maximized)))
- '(org-roam-ui-mode t)
- '(package-selected-packages '(helm-ag svg-tag-mode elfeed-goodies zones))
+ '(org-roam-ui-mode t t)
+ '(package-selected-packages
+   '(eslintd-fix eslint-fix org-roam org htmlize helm-ag svg-tag-mode elfeed-goodies zones))
  '(warning-suppress-types
    '((after-init-hook)
      (after-init-hook)

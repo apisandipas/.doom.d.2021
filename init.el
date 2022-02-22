@@ -20,10 +20,10 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       company           ; the ultimate code completion backend
-       helm              ; the *other* search engine for love and life
+       (company +childframe)           ; the ultimate code completion backend
+       (helm +childframe)              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       (ivy +childframe)               ; a search engine for love and life
        vertico           ; the search engine of the future
 
        :ui
@@ -42,7 +42,7 @@
        nav-flash         ; blink cursor line after big motions
        neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
-       (popup +defaults)   ; tame sudden yet inevitable temporary windows
+       (popup +all)   ; tame sudden yet inevitable temporary windows
        tabs              ; a tab bar for Emacs
        treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
@@ -66,7 +66,7 @@
        snippets          ; my elves. They type so I don't have to
        word-wrap         ; soft wrapping with language-aware indent
 
-       ;; :emacs
+       :emacs
        (dired +icons)
        electric          ; smarter, keyword-based electric-indent
        ;;ibuffer         ; interactive buffer management

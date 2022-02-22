@@ -1,6 +1,5 @@
 ;;; UI Adjustments
 
-(setq doom-modeline-height 36)
 (setq centaur-tabs-set-icons t)
 (setq centaur-tabs-height 36)
 
@@ -17,10 +16,10 @@
 ;;;;; Font Settings
 (setq doom-font
       (font-spec
-       :family "VictorMono Nerd Font" :size 20)
+       :family "VictorMono Nerd Font" :size 18)
       doom-variable-pitch-font
       (font-spec
-       :family  "VictorMono Nerd Font" :size 20)
+       :family  "VictorMono Nerd Font" :size 18)
       doom-big-font
       (font-spec
        :family "VictorMono Nerd Font" :size 20))
@@ -79,15 +78,15 @@
 ;; Modeline Config
 (add-hook! 'after-init-hook
   (lambda ()  (setq doom-modeline-height 36
-                    doom-modeline-bar-width 6
-                    doom-modeline-lsp t
-                    doom-modeline-github t
-                    doom-modeline-mu4e t
-                    doom-modeline-irc t
-                    doom-modeline-minor-modes nil
-                    doom-modeline-persp-name nil
-                    doom-modeline-buffer-file-name-style 'truncate-except-project
-                    doom-modeline-major-mode-icon nil)
+                doom-modeline-bar-width 6
+                doom-modeline-lsp t
+                doom-modeline-github nil
+                doom-modeline-mu4e nil
+                doom-modeline-irc nil
+                doom-modeline-minor-modes nil
+                doom-modeline-persp-name t
+                doom-modeline-buffer-file-name-style 'truncate-except-project
+                doom-modeline-major-mode-icon t)
     (custom-set-faces '(mode-line ((t (:height 0.85))))
                       '(mode-line-inactive ((t (:height 0.85)))))))
 
@@ -133,56 +132,12 @@
         (org-verbatim (:height 1.55) org-verbatim)
         (org-block (:height 1.25) org-block)
         (org-block-begin-line (:height 0.7) org-block)))
-  (setq header-line-format " ")
-  (org-appear-mode -1)
+  (setq header-line-format " \n\n\n\n")
   (org-image-actual-width nil)
   (org-display-inline-images)
   (org-tree-slide-header nil)
   (display-line-numbers-mode nil))
 
-(use-package org-tree-slide
-  :custom
-  (add-hook! org-tree-slide-mode 'bp/presentation-mode)
-  )
-
-
-(defun bp/presentation-mode ()
-  (setq-local face-remapping-alist '(
-        (header-line (:height 5) variable-pitch)
-        (org-document-title (:height 1.75) org-document-title)
-        (org-code (:height 1.55) org-code)
-        (org-verbatim (:height 1.55) org-verbatim)
-        (org-block (:height 1.25) org-block)
-        (org-block-begin-line (:height 0.7) org-block)))
-  (setq header-line-format " ")
-  (org-appear-mode -1)
-  (org-image-actual-width nil)
-  (org-display-inline-images)
-  (org-tree-slide-header nil)
-  (display-line-numbers-mode nil))
-
-(use-package org-tree-slide
-  :custom
-  (add-hook! org-tree-slide-mode 'bp/presentation-mode)
-  )
-
-
-(defun bp/presentation-mode ()
-  (setq-local face-remapping-alist '(
-        (header-line (:height 5) variable-pitch)
-        (org-document-title (:height 1.75) org-document-title)
-        (org-code (:height 1.55) org-code)
-        (org-verbatim (:height 1.55) org-verbatim)
-        (org-block (:height 1.25) org-block)
-        (org-block-begin-line (:height 0.7) org-block)))
-  (setq header-line-format " ")
-  (org-appear-mode -1)
-  (org-image-actual-width nil)
-  (org-display-inline-images)
-  (org-tree-slide-header nil)
-  (display-line-numbers-mode nil))
-
-(use-package org-tree-slide
-  :custom
-  (add-hook! org-tree-slide-mode 'bp/presentation-mode)
-  )
+;; (use-package org-tree-slide
+;;   :custom
+(add-hook! org-tree-slide-mode 'bp/presentation-mode)

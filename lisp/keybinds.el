@@ -19,4 +19,18 @@
       "t" #'counsel-load-theme)
 
 (map! :leader
-      :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
+      :desc "Clone indirect buffer other window"
+      "b c" #'clone-indirect-buffer-other-window)
+
+
+(map! :leader
+      :prefix ("w" "window")
+      :desc "Undo Last Window Change"
+      "u" #'winner-undo)
+
+(map! :leader
+      :prefix ("w" "window")
+      :desc "Redo Last Window Change"
+      "U" #'winner-redo)
+
+(global-set-key (kbd "M-=") 'er/expand-region)

@@ -41,43 +41,46 @@
 (after! org
   (require 'org-protocol)
   (require 'org-protocol-capture-html)
+  (require 'org-superstar)
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
   (setq
    org-directory "~/org/"
    org-agenda-files (list "inbox.org" "agenda.org")
    org-ellipsis "▼"
+   org-superstar-item-bullet-alist '((?+ . ?➤) (?- . ?✦))
    org-default-notes-file (expand-file-name
                            "notes.org" org-directory)
    org-log-done 'time
    org-hide-emphasis-markers t)
 
-(setq org-agenda-custom-commands
-      '(
-        ("c" . "📦 Contexts")
-        ("ch" "🏥 Health" tags-todo "Health")
-        ("cs" "🧔🏼‍♂️ Self" tags-todo "Self")
-        ("cl" "💏 Love" tags-todo "Love")
-        ("cH" "🏠 Home" tags-todo "Home")
-        ("cC" "🏙 Community" tags-todo "Community")
-        ("A" "📅 Appointments" tags-todo "appointment")
-        ("B" "💸 Bills" tags-todo "bill")
-        ("C" "💦 Chores" tags-todo "chore")
+  (setq org-agenda-custom-commands
+        '(
+          ("c" . "📦 Contexts")
+          ("ch" "🏥 Health" tags-todo "Health")
+          ("cs" "🧔🏼‍♂️ Self" tags-todo "Self")
+          ("cl" "💏 Love" tags-todo "Love")
+          ("cH" "🏠 Home" tags-todo "Home")
+          ("cC" "🏙 Community" tags-todo "Community")
+          ("A" "📅 Appointments" tags-todo "appointment")
+          ("B" "💸 Bills" tags-todo "bill")
+          ("C" "💦 Chores" tags-todo "chore")
 
-        ("g" "👷🏼‍ GTD"
-         ((todo "Health")
-          (todo "Self")
-          (todo "Love")
-          (todo "Home")
-          (todo "Community"))
-         )
-        ("f" "💎 FACETS"
-         ((tags-todo "Health")
-          (tags-todo "Self")
-          (tags-todo "Love")
-          (tags-todo "Home")
-          (tags-todo "Community"))
-         )
+          ("g" "👷🏼‍ GTD"
+           ((todo "Health")
+            (todo "Self")
+            (todo "Love")
+            (todo "Home")
+            (todo "Community"))
+           )
+          ("f" "💎 FACETS"
+           ((tags-todo "Health")
+            (tags-todo "Self")
+            (tags-todo "Love")
+            (tags-todo "Home")
+            (tags-todo "Community"))
+           )
+          )
         )
-      )
 
 
   (setq org-tag-alist '(("URGENT" . ?u)
@@ -126,10 +129,10 @@
                     "/Entered on/ %U")))
         ))
 
-(use-package org-superstar
-  :config
-  (setq org-superstar-item-bullet-alist '((?+ . ?➤) (?- . ?✦)))
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+;; (use-package org-superstar
+;;   :config
+;;   (setq org-superstar-item-bullet-alist '((?+ . ?➤) (?- . ?✦)))
+;;   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
 (use-package! org-super-agenda
   :init
@@ -155,3 +158,4 @@
         org-gcal-fetch-file-alist '(
                                     ("bparonto@gmail.com" .  "~/org/agenda.org")
                                     ("4tc3t9c2hef41n7dc461idql8k@group.calendar.google.com". "~/org/agenda.org"))))
+
