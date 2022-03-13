@@ -5,8 +5,8 @@
 
 (set-frame-parameter (selected-frame)'alpha '(75 . 80))
 (set-frame-parameter (selected-frame)'internal-border-width 24)
-(custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . maximized)))))
+;; (custom-set-variables
+;;  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 
 (add-to-list 'default-frame-alist '(alpha . (75 . 80)))
 (add-to-list 'default-frame-alist '(internal-border-width . 24))
@@ -28,8 +28,9 @@
 (setq standard-indent 2)
 
 ;;;;; Set theme
-(setq doom-theme 'doom-vibrant)
+;; (setq doom-theme 'doom-vibrant)
 ;; (setq doom-theme 'modus-vivendi)
+(setq doom-theme 'doom-palenight)
 
 (after! doom-themes
   (setq doom-themes-enable-bold t
@@ -60,12 +61,12 @@
 ;; (setq split-height-threshold nil)
 ;; (setq split-width-threshold 0)
 
-(defun bp/prefer-horizontal-split ()
-  (set-variable 'split-height-threshold nil t)
-  (set-variable 'split-width-threshold 40 t))
-(add-hook! 'markdown-mode-hook #'bp/prefer-horizontal-split)
-(add-hook! 'org-mode-hook #'bp/prefer-horizontal-split)
-(add-hook! 'prog-mode-hook #'bp/prefer-horizontal-split)
+;; (defun bp/prefer-horizontal-split ()
+;;   (set-variable 'split-height-threshold nil t)
+;;   (set-variable 'split-width-threshold 40 t))
+;; (add-hook! 'markdown-mode-hook #'bp/prefer-horizontal-split)
+;; (add-hook! 'org-mode-hook #'bp/prefer-horizontal-split)
+;; (add-hook! 'prog-mode-hook #'bp/prefer-horizontal-split)
 
 ;; Removed dupe 'evil-' from which-key labels
 (after! which-key

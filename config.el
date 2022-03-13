@@ -1,4 +1,7 @@
 ;; -*- lexical-binding: t; -*-
+;;
+;; (load (expand-file-name "~/.quicklisp/slime-helper.el") nil t)
+(setq inferior-lisp-program "sbcl")
 
 (load "~/.doom.d/lisp/keybinds" nil t)
 (load "~/.doom.d/lisp/ui" nil t)
@@ -14,7 +17,8 @@
       user-mail-address "bryan@cablecar.digital")
 
 ;; Open treemacs on launch
-(add-hook! 'window-setup-hook #'treemacs 'append)
+;; Removed to form better file browsing habits...
+;; (add-hook! 'window-setup-hook #'treemacs 'append)
 
 ;;; Regenerate Agenda HTML after TODO changes
 (add-hook 'org-after-todo-state-change-hook
@@ -22,12 +26,30 @@
             (run-with-idle-timer 20 nil (lambda ()
                                           (load-file "~/Code/Repos/agenda-html/agenda-html.el")))))
 
-(add-hook! 'typescript-mode (lambda ()
-                              (setq lsp-eslint-enable t
-                                    lsp-eslint-auto-fix-on-save t)))
+;; (add-hook! 'typescript-mode (lambda ()
+;;                               (setq lsp-eslint-enable t
+;;                                     lsp-eslint-auto-fix-on-save t)))
+
 (use-package auto-dim-other-buffers
   :config
+  ;; (set-face-attribute auto-dim-other-buffers-face '( ;background "#444"
+  ;;                                                   ))
   (add-hook 'after-init-hook
             (lambda ()
               (when (fboundp 'auto-dim-other-buffers-mode)
                 (auto-dim-other-buffers-mode t)))))
+
+
+
+(after! eshell
+  (setq eshell-rc-script "~/.doom.d/eshell/profile"
+        eshell-aliases-file "~/.doom.d/eshell/aliases"
+        eshell-history-size 5000
+        eshell-buffer-maximum-lines 5000
+        eshell-hist-ignoredups t
+        eshell-scroll-to-bottom-on-input t
+        eshell-destroy-buffer-when-process-dies t))
+
+
+(setf typescript-indent-level 2)
+;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))

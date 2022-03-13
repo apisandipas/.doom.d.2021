@@ -10,9 +10,10 @@
  '(initial-frame-alist '((fullscreen . maximized)))
  '(org-roam-ui-mode t t)
  '(package-selected-packages
-   '(eslintd-fix eslint-fix org-roam org htmlize helm-ag svg-tag-mode elfeed-goodies zones))
+   '(prettier-js slime stumpwm-mode eslintd-fix eslint-fix org-roam org htmlize helm-ag svg-tag-mode elfeed-goodies zones))
  '(warning-suppress-types
-   '((after-init-hook)
+   '((find-file-hook)
+     (after-init-hook)
      (after-init-hook)
      (emacs)
      (after-init-hook)

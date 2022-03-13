@@ -55,18 +55,17 @@
   ;; Show the time and date in modeline
   (setq display-time-day-and-date nil)
   (display-time-mode -1)
-  ;; Also take a look at display-time-format and format-time-string
 
   ;; Start the Polybar panel
   (bp/start-panel)
 
   ;; Launch apps that will run in the background
-  (bp/run-in-background "dunst")
   (bp/run-in-background "nm-applet")
   (bp/run-in-background "pasystray")
   (bp/run-in-background "blueman-applet")
   (bp/run-in-background "blueman-tray"))
-
+  ;; (bp/run-in-background "serve ~/org/brain/bins/agenda -p 8989")
+  (bp/run-in-background "dunst -geom \"380x50-10+38\" -frame_width \"1\" -font \"Victor Mono Medium 14\"")
 
 (defun bp/exwm-update-class ()
   (exwm-workspace-rename-buffer exwm-class-name))
@@ -76,17 +75,25 @@
     ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
 
 
-(defun bp/configure-window-by-class ()
-  (interactive)
-  (pcase exwm-class-name
-    ("firefox" (exwm-workspace-move-window 6))))
+;; (defun bp/configure-window-by-class ()
+;;   (interactive)
+;;   (pcase exwm-class-name
+;;     ("firefox" (exwm-workspace-move-window 6))))
 
 ;; This function should be used only after configuring autorandr!
-;; (defun bp/update-displays ()
-;;   (bp/run-in-background "autorandr --change --force")
-;;   (bp/set-wallpaper)
-;;   (message "Display config: %s"
-;;            (string-trim (shell-command-to-string "autorandr --current"))))
+(defun bp/update-displays ()
+  (bp/run-in-background "autorandr --change --force")
+  (bp/set-wallpaper)
+  (message "Display config: %s"
+           (string-trim (shell-command-to-string "autorandr --current"))))
+
+(use-package edwina
+  :config
+  (setq display-buffer-base-action '(display-buffer-below-selected))
+  (edwina-setup-dwm-keys)
+  ;; (edwina-mode 1)
+  )
+
 
 (use-package exwm
   :config
@@ -99,7 +106,7 @@
   (add-hook 'exwm-update-title-hook #'bp/exwm-update-title)
 
   ;; Configure windows as they're created
-  (add-hook 'exwm-manage-finish-hook #'bp/configure-window-by-class)
+  ;; (add-hook 'exwm-manage-finish-hook #'bp/configure-window-by-class)
 
   ;; When EXWM starts up, do some extra confifuration
   (add-hook 'exwm-init-hook #'bp/exwm-init-hook)
@@ -128,8 +135,10 @@
 
   ;; NOTE: Uncomment these lines after setting up autorandr!
   ;; React to display connectivity changes, do initial display update
-  ;; (add-hook 'exwm-randr-screen-change-hook #'bp/update-displays)
-  ;; (bp/update-displays)
+  (add-hook 'exwm-randr-screen-change-hook #'bp/update-displays)
+  (bp/update-displays)
+
+
 
   ;; Set the wallpaper after changing the resolution
   (bp/set-wallpaper)
@@ -141,19 +150,24 @@
   (setq mouse-autoselect-window nil
         focus-follows-mouse nil)
 
+;;;  Play nice with firefox, enables modal interactions
+  (require 'exwm-firefox-evil)
+  (add-hook 'exwm-manage-finish-hook 'exwm-firefox-evil-activate-if-firefox)
+
   ;; These keys should always pass through to Emacs
   (setq exwm-input-prefix-keys
         '(?\C-x
           ?\C-u
           ?\C-h
           ?\M-x
+          escape
           ?\M-`
           ?\M-&
           ?\M-:
-          ?\s-o                         ;;Allow org-capture to passthru in Xwindows
-          ?\s-i                         ;; Toggles char-mode/line-mode
-          ?\C-\M-j                      ;; Buffer list
-          ?\C-\ ))                      ;; Ctrl+Space
+          ?\s-o    ;;Allow org-capture to passthru in Xwindows
+          ?\s-i    ;; Toggles char-mode/line-mode
+          ?\C-\M-j ;; Buffer list
+          ?\C-\ )) ;; Ctrl+Space
 
   ;; Ctrl+Q will enable the next key to be sent directly
   (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
@@ -174,7 +188,8 @@
                        (start-process-shell-command command nil command)))
 
           ;; Switch workspace
-          ([?\s-w] . exwm-workspace-switch)
+          ;; ([?\s-w] . exwm-workspace-switch)
+          ([?\s-w] . switch-to-buffer-other-window)
           ;;
           ;; move window workspace with SUPER+SHIFT+{0-9}
           ([?\s-\)] . (lambda () (interactive) (exwm-workspace-move-window 0)))
@@ -187,7 +202,8 @@
           ([?\s-&] . (lambda () (interactive) (exwm-workspace-move-window 7)))
           ([?\s-*] . (lambda () (interactive) (exwm-workspace-move-window 8)))
           ([?\s-\(] . (lambda () (interactive) (exwm-workspace-move-window 9)))
-          ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
+
+          ;; Switch to window workspace with SUPER+SHIFT+{0-9}
           ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
           ,@(mapcar (lambda (i)
                       `(,(kbd (format "s-%d" i)) .
@@ -195,6 +211,7 @@
                           (interactive)
                           (exwm-workspace-switch-create ,i))))
                     (number-sequence 0 9))))
+
 
   (exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
   ;; (perspective-exwm-mode)
@@ -211,60 +228,30 @@
   (desktop-environment-brightness-normal-decrement "5%-"))
 
 
-(defun bp/disable-desktop-notifications ()
-  (interactive)
-  (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_PAUSE\""))
-
-(defun bp/enable-desktop-notifications ()
-  (interactive)
-  (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_RESUME\""))
-
-(defun bp/toggle-desktop-notifications ()
-  (interactive)
-  (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_TOGGLE\""))
-
-
-;; (setq perspective-exwm-override-initial-name
-;;       '((0 . "video")
-;;         (1 . "dev")
-;;         (2 . "term")
-;;         (3 . "comms")
-;;         (4 . "mail")
-;;         (5 . "empty")
-;;         (6 . "web")
-;;         (7 . "vc")
-;;         (8 . "music")
-;;         (9 . "misc")))
-
-;; (defun my/exwm-configure-window ()
+(require 'cl-lib)
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  "Prevent annoying \"Active processes exist\" query when you quit Emacs."
+  (cl-letf (((symbol-function #'process-list) (lambda ())))
+    ad-do-it))
+;; (defun bp/disable-desktop-notifications ()
 ;;   (interactive)
-;;   (pcase exwm-class-name
-;;     ((or "Firefox" "Nightly")
-;;      (perspective-exwm-assign-window
-;;       :workspace-index 6
-;;       :persp-name "web"))
-;;     ("Kitty"
-;;      (perspective-exwm-assign-window
-;;       :workspace-index 6
-;;       :persp-name "term"))
-;;     ((or "Slack" "Discord" "TelegramDesktop")
-;;      (perspective-exwm-assign-window
-;;       :workspace-index 3
-;;       :persp-name "comms"))))
+;;   (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_PAUSE\""))
 
-;; (add-hook 'exwm-manage-finish-hook #'my/exwm-configure-window)
+;; (defun bp/enable-desktop-notifications ()
+;;   (interactive)
+;;   (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_RESUME\""))
+
+;; (defun bp/toggle-desktop-notifications ()
+;;   (interactive)
+;;   (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_TOGGLE\""))
 
 (defun exwm-input-line-mode ()
   "Set exwm window to line-mode and show mode line"
-  (call-interactively #'exwm-input-grab-keyboard)
-  ;; (exwm-layout-show-mode-line)
-  )
+  (call-interactively #'exwm-input-grab-keyboard))
 
 (defun exwm-input-char-mode ()
   "Set Exwm window to char-mode and hide mode line"
-  (call-interactively #'exwm-input-release-keyboard)
-  ;; (exwm-layout-hide-mode-line)
-  )
+  (call-interactively #'exwm-input-release-keyboard))
 
 (defun exwm-input-toggle-mode ()
   "Toggle between line- and char-mode"

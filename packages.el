@@ -26,13 +26,13 @@
 ;;   :recipe
 ;;   (:host github
 ;;    :repo "emacsmirror/perspective-exwm"))
-
+(package! edwina)
 (package! desktop-environment)
 (package! exwm-outer-gaps
   :recipe
   (:host github
    :repo "lucasgruss/exwm-outer-gaps"))
-
+(package! exwm-firefox-evil)
 (package! doom-modeline-exwm
   :recipe
   (:host github
@@ -47,14 +47,4 @@
    :repo "rougier/mu4e-dashboard"))
 
 (package! auto-dim-other-buffers)
-;; (when (package! eaf :recipe (:host github
-;;                              :repo "manateelazycat/emacs-application-framework"
-;;                              :files ("*.el" "*.py" "app" "core")
-;;                              :build (:not compile)))
-
-;;   (package! ctable :recipe (:host github :repo "kiwanami/emacs-ctable"))
-;;   (package! deferred :recipe (:host github :repo "kiwanami/emacs-deferred"))
-;;   (package! epc :recipe (:host github :repo "kiwanami/emacs-epc")))
-
-;; (package! eaf-mindmap :recipe (:host github :repo "emacs-eaf/eaf-mindmap"))
-;; (package! eaf-browser :recipe (:host github :repo "emacs-eaf/eaf-browser"))
+(package! stumpwm-mode)
