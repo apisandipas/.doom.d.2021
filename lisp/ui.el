@@ -79,15 +79,15 @@
 ;; Modeline Config
 (add-hook! 'after-init-hook
   (lambda ()  (setq doom-modeline-height 36
-                doom-modeline-bar-width 6
-                doom-modeline-lsp t
-                doom-modeline-github nil
-                doom-modeline-mu4e nil
-                doom-modeline-irc nil
-                doom-modeline-minor-modes nil
-                doom-modeline-persp-name t
-                doom-modeline-buffer-file-name-style 'truncate-except-project
-                doom-modeline-major-mode-icon t)
+                    doom-modeline-bar-width 6
+                    doom-modeline-lsp t
+                    doom-modeline-github nil
+                    doom-modeline-mu4e nil
+                    doom-modeline-irc nil
+                    doom-modeline-minor-modes nil
+                    doom-modeline-persp-name t
+                    doom-modeline-buffer-file-name-style 'truncate-except-project
+                    doom-modeline-major-mode-icon t)
     (custom-set-faces '(mode-line ((t (:height 0.85))))
                       '(mode-line-inactive ((t (:height 0.85)))))))
 
@@ -126,19 +126,24 @@
 
 
 (defun bp/presentation-mode ()
+  "Setup UI for giving presentations"
+  (interactive)
   (setq-local face-remapping-alist '(
-        (header-line (:height 5) variable-pitch)
-        (org-document-title (:height 1.75) org-document-title)
-        (org-code (:height 1.55) org-code)
-        (org-verbatim (:height 1.55) org-verbatim)
-        (org-block (:height 1.25) org-block)
-        (org-block-begin-line (:height 0.7) org-block)))
-  (setq header-line-format " \n\n\n\n")
-  (org-image-actual-width nil)
+                                     (header-line (:height 5) variable-pitch)
+                                     (org-document-title (:height 1.75) org-document-title)
+                                     (org-code (:height 1.55) org-code)
+                                     (org-verbatim (:height 1.55) org-verbatim)
+                                     (org-block (:height 1.25) org-block)
+                                     (org-block-begin-line (:height 0.7) org-block)))
+  (org-tree-slide-mode)
+  (topspace-mode 'toggle)
+  ;; (setq header-line-format " \n\n\n\n")
+  (setq org-image-actual-width nil)
   (org-display-inline-images)
-  (org-tree-slide-header nil)
-  (display-line-numbers-mode nil))
+  (setq org-tree-slide-header nil)
+  (setq-local display-line-numbers-mode nil)
+  )
 
 ;; (use-package org-tree-slide
 ;;   :custom
-(add-hook! org-tree-slide-mode 'bp/presentation-mode)
+;; (add-hook! org-tree-slide-mode 'bp/presentation-mode)

@@ -32,8 +32,8 @@
 
 (use-package auto-dim-other-buffers
   :config
-  ;; (set-face-attribute auto-dim-other-buffers-face '( ;background "#444"
-  ;;                                                   ))
+  ;; (set-face-attribute auto-dim-other-buffers-face '( background "#bada55"))
+
   (add-hook 'after-init-hook
             (lambda ()
               (when (fboundp 'auto-dim-other-buffers-mode)
@@ -51,5 +51,14 @@
         eshell-destroy-buffer-when-process-dies t))
 
 
-(setf typescript-indent-level 2)
+;; (setf typescript-indent-level 2)
 ;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+;;
+
+(after! circe
+  (set-irc-server! "irc.libera.chat"
+   '(:tls t
+        :port 6697
+        :sasl-username "apis_and_ipas"
+        :sasl-password "qwerty1234"
+        :channels ("#emacs" "#chat" "#javascript" "#guix" "#react" "#chicago"))))

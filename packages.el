@@ -48,3 +48,4 @@
 
 (package! auto-dim-other-buffers)
 (package! stumpwm-mode)
+(package! topspace)
