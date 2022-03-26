@@ -1,0 +1,33 @@
+* How to pimp out your Linux desktop
+
++ Plug in your rice cooker
+
+  #+begin_src emacs-lisp
+;; Hello World in Emacs Lisp
+
+;;;  Define the function
+(defun hello-world ()
+  (message "hello kaylyn"))
+
+;;;  Call the function
+(hello-world)
+
+  #+end_src
+
+  : hello kaylyn
+
+* Slide 1 - Pick a Topic
+
+A *Good* topic may be anything you're passionate about... Like Emacs!
+
+
+* Slide 2 - Keep it brief.
+
+Nobody but you cares about Emacs
+
+* Thanks for Coming!
+
+Stay in touch!
+
+Twitter - @apis_and_ipas
+Twitch.tv - @facetious_coding
