@@ -1,35 +1,5 @@
 ;; -*- lexical-binding: t; -*-
-;;
-
-;; (defvar bp/mu4e-account-alist
-;;   '(("bparonto@gmail.com"
-;;      (user-mail-address  "bparonto@gmail.com")
-;;      (user-full-name     "Bryan Paronto")
-;;      (mu4e-sent-folder   "~/Mail/bparonto@gmail.com/Sent Items")
-;;      (mu4e-drafts-folder "~/Mail/bparonto@gmail.com/Drafts")
-;;      (mu4e-trash-folder  "~/Mail/bparonto@gmail.com/Deleted Items")
-;;      (mu4e-refile-folder "~/Mail/bparonto@gmail.com/Archive")
-;;      (smtpmail-local-domain "gmail.com")
-;;      (smtpmail-default-smtp-server "smtp.gmail.com")
-;;      (smtpmail-smtp-server "smtp.gmail.com")
-;;      (smtpmail-smtp-service 587)
-;;      )
-
-;;     ("bryan@cablecar.digital"
-;;      (user-mail-address  "bryan@cablecar.digital")
-;;      (user-full-name     "Bryan Paronto")
-;;      (mu4e-sent-folder   "~/Mail/bryan@cablecar.digital/Sent Items")
-;;      (mu4e-drafts-folder "~/Mail/bryan@cablecar.digital/Drafts")
-;;      (mu4e-trash-folder  "~/Mail/bryan@cablecar.digital/Deleted Items")
-;;      (mu4e-refile-folder "~/Mail/bryan@cablecar.digital/Archive")
-;;      (smtpmail-local-domain "gmail.com")
-;;      (smtpmail-default-smtp-server "smtp.gmail.com")
-;;      (smtpmail-smtp-server "smtp.gmail.com")
-;;      (smtpmail-smtp-service 587)
-;;      )
-;;     ))
-
-
+;
 ; we installed this with homebrew
 (setq mu4e-mu-binary (executable-find "mu"))
 ;; this command is called to sync imap servers:
@@ -62,7 +32,7 @@
                   (mu4e-drafts-folder . "/bparonto@gmail/Drafts")
                   (mu4e-refile-folder . "/bparonto@gmail/Archive")
                   (mu4e-sent-folder . "/bparonto@gmail/Sent Messages")
-                  (mu4e-trash-folder . "/bryan@gmail/Deleted Messages")))
+                  (mu4e-trash-folder . "/bparonto@gmail/Deleted Messages")))
 
         ,(make-mu4e-context
           :name "bryan@cablecar"
