@@ -4,20 +4,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("028c226411a386abc7f7a0fba1a2ebfae5fe69e2a816f54898df41a6a3412bb5" "a82ab9f1308b4e10684815b08c9cac6b07d5ccb12491f44a942d845b406b0296" default))
- '(doom-big-font-mode t t)
- '(global-svg-tag-mode t)
- '(initial-frame-alist '((fullscreen . maximized)))
- '(org-roam-ui-mode t t)
+   '("47db50ff66e35d3a440485357fb6acb767c100e135ccdf459060407f8baea7b2" "b73a23e836b3122637563ad37ae8c7533121c2ac2c8f7c87b381dd7322714cd0" default))
  '(package-selected-packages
-   '(prettier-js slime stumpwm-mode eslintd-fix eslint-fix org-roam org htmlize helm-ag svg-tag-mode elfeed-goodies zones))
- '(warning-suppress-types
-   '((find-file-hook)
-     (after-init-hook)
-     (after-init-hook)
-     (emacs)
-     (after-init-hook)
-     (nrepl-connected-hook))))
+   '(nano-modeline nano-agenda nano-theme vertico-posframe org-appear graphql use-package which-key typescript-mode stumpwm-mode slime prettier-js guix evil-visualstar evil-goggles eslintd-fix eslint-fix counsel))
+ '(send-mail-function 'smtpmail-send-it)
+ '(smtpmail-smtp-server "smtp.gmail.com")
+ '(smtpmail-smtp-service 587))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

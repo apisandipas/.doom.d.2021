@@ -5,16 +5,24 @@
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
 (package! s)
-(package! org-protocol-capture-html)
+(package! one-themes)
+(package! winum)
 (unpin! org-roam)
 (package! org-roam-ui)
-(package! doct)
-(package! org-tree-slide)
-(package! one-themes)
-(package! elfeed-goodies)
-(package! org-super-agenda)
-(package! visual-fill-column)
+(package! org-protocol-capture-html)
+(package! org-present)
+(package! org-auto-tangle)
 (package! org-superstar)
+(package! org-super-agenda)
+
+;; unused
+(package! doct)
+
+(package! vertico-posframe)
+
+(package! elfeed-goodies)
+
+(package! visual-fill-column)
 (package! dashboard)
 (package! ligature
   :recipe
@@ -22,10 +30,6 @@
    :repo "mickeynp/ligature.el"))
 
 (package! exwm)
-;; (package! perspective-exwm
-;;   :recipe
-;;   (:host github
-;;    :repo "emacsmirror/perspective-exwm"))
 (package! edwina)
 (package! desktop-environment)
 (package! exwm-outer-gaps
@@ -38,9 +42,6 @@
   (:host github
    :repo "elken/doom-modeline-exwm"))
 
-(package! all-the-icons-ivy)
-(package! ivy-posframe)
-
 (package! mu4e-dashboard
   :recipe
   (:host github
@@ -48,4 +49,9 @@
 
 (package! auto-dim-other-buffers)
 (package! stumpwm-mode)
-(package! topspace)
+
+;;; Streaming setup
+(package! websocket)
+(package! obs-websocket
+  :recipe
+  (:host github :repo "sachac/obs-websocket-el"))

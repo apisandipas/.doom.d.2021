@@ -1,3 +1,6 @@
+;; -*- lexical-binding: t; -*-
+;; Configuration for EXWM and Desktop Environment
+
 (defun bp/run-in-background (command)
   (let ((command-parts (split-string command "[ ]+")))
     (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
@@ -30,27 +33,29 @@
 
 (defun bp/polybar-exwm-workspace ()
   (pcase exwm-workspace-current-index
-    (1 "  Dev")
-    (2 "  Term")
-    (3 "  Chat")
-    (4 "  Mail")
-    (5 "  Data")
-    (6 "爵  Web")
-    (7 "  VCS")
-    (8 "  Music")
-    (9 "  Files")
-    (0 "  Video")
-    ))
+    (0 "  Dev")
+    (1 "  Term")
+    (2 "  Chat")
+    (3 "  Mail")
+    (4 "  Data")
+    (5 "爵  Web")
+    (6 "  VCS")
+    (7 "  Music")
+    (8 "  Files")
+    (9 "  Video")))
 
 ;; Update panel indicator when workspace changes
 (add-hook 'exwm-workspace-switch-hook #'bp/send-polybar-exwm-workspace)
 
 (defun bp/exwm-init-hook ()
-  (doom-mark-buffer-as-real-h)
-  ;; Open eshell by default
-  ;; (eshell)
 
-  (exwm-outer-gaps-mode +1)
+  (doom-mark-buffer-as-real-h)
+
+  ;; Make workspace 1 be the one where we land at startup
+  (exwm-workspace-switch-create 0)
+
+  ;; Useless gaps
+  (exwm-outer-gaps-mode 1)
 
   ;; Show the time and date in modeline
   (setq display-time-day-and-date nil)
@@ -63,9 +68,10 @@
   (bp/run-in-background "nm-applet")
   (bp/run-in-background "pasystray")
   (bp/run-in-background "blueman-applet")
-  (bp/run-in-background "blueman-tray"))
-  ;; (bp/run-in-background "serve ~/org/brain/bins/agenda -p 8989")
-  (bp/run-in-background "dunst -geom \"380x50-10+38\" -frame_width \"1\" -font \"Victor Mono Medium 14\"")
+  (bp/run-in-background "blueman-tray")
+  (bp/run-in-background "dunst -geom \"380x50-10+38\" -frame_width \"1\" -font \"Victor Mono Medium 14\""))
+
+;; (bp/run-in-background "serve ~/org/brain/bins/agenda -p 8989")
 
 (defun bp/exwm-update-class ()
   (exwm-workspace-rename-buffer exwm-class-name))
@@ -73,7 +79,6 @@
 (defun bp/exwm-update-title ()
   (pcase exwm-class-name
     ("firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
-
 
 ;; (defun bp/configure-window-by-class ()
 ;;   (interactive)
@@ -87,12 +92,6 @@
   (message "Display config: %s"
            (string-trim (shell-command-to-string "autorandr --current"))))
 
-(use-package edwina
-  :config
-  (setq display-buffer-base-action '(display-buffer-below-selected))
-  (edwina-setup-dwm-keys)
-  ;; (edwina-mode 1)
-  )
 
 
 (use-package exwm
@@ -121,23 +120,22 @@
   ;; This will need to be updated to the name of a display!  You can find
   ;; the names of your displays by looking at arandr or the output of xrandr
   (setq exwm-randr-workspace-monitor-plist '(
+                                             0 "DVI-I-2-2"
                                              1 "DVI-I-2-2"
                                              2 "DVI-I-2-2"
                                              3 "DVI-I-2-2"
-                                             4 "DVI-I-2-2"
+                                             4 "DVI-I-1-1"
                                              5 "DVI-I-1-1"
                                              6 "DVI-I-1-1"
-                                             7 "DVI-I-1-1"
+                                             7 "eDP-1"
                                              8 "eDP-1"
                                              9 "eDP-1"
-                                             0 "eDP-1"
                                              ))
 
   ;; NOTE: Uncomment these lines after setting up autorandr!
   ;; React to display connectivity changes, do initial display update
   (add-hook 'exwm-randr-screen-change-hook #'bp/update-displays)
   (bp/update-displays)
-
 
 
   ;; Set the wallpaper after changing the resolution
@@ -176,42 +174,48 @@
   ;; Keep in mind that changing this list after EXWM initializes has no effect.
   (setq exwm-input-global-keys
         `(
-          ;; Move between windows
+                                ;; Move between windows
           ([s-left] . windmove-left)
           ([s-right] . windmove-right)
           ([s-up] . windmove-up)
           ([s-down] . windmove-down)
 
-          ;; Launch applications via shell command
+                                ;; Launch applications via shell command
           ([?\s-&] . (lambda (command)
                        (interactive (list (read-shell-command "$ ")))
                        (start-process-shell-command command nil command)))
 
-          ;; Switch workspace
-          ;; ([?\s-w] . exwm-workspace-switch)
-          ([?\s-w] . switch-to-buffer-other-window)
-          ;;
-          ;; move window workspace with SUPER+SHIFT+{0-9}
-          ([?\s-\)] . (lambda () (interactive) (exwm-workspace-move-window 0)))
-          ([?\s-!] . (lambda () (interactive) (exwm-workspace-move-window 1)))
-          ([?\s-\@] . (lambda () (interactive) (exwm-workspace-move-window 2)))
-          ([?\s-#] . (lambda () (interactive) (exwm-workspace-move-window 3)))
-          ([?\s-$] . (lambda () (interactive) (exwm-workspace-move-window 4)))
-          ([?\s-%] . (lambda () (interactive) (exwm-workspace-move-window 5)))
-          ([?\s-^] . (lambda () (interactive) (exwm-workspace-move-window 6)))
-          ([?\s-&] . (lambda () (interactive) (exwm-workspace-move-window 7)))
-          ([?\s-*] . (lambda () (interactive) (exwm-workspace-move-window 8)))
-          ([?\s-\(] . (lambda () (interactive) (exwm-workspace-move-window 9)))
+        ;; Switch workspace
+        ;; ([?\s-w] . exwm-workspace-switch)
+        ([?\s-w] . switch-to-buffer-other-window)
+        ;;
+        ;; move window workspace with SUPER+SHIFT+{0-9}
+        ([?\s-\)] . (lambda () (interactive) (exwm-workspace-move-window 0)))
+        ([?\s-!] . (lambda () (interactive) (exwm-workspace-move-window 1)))
+        ([?\s-\@] . (lambda () (interactive) (exwm-workspace-move-window 2)))
+        ([?\s-#] . (lambda () (interactive) (exwm-workspace-move-window 3)))
+        ([?\s-$] . (lambda () (interactive) (exwm-workspace-move-window 4)))
+        ([?\s-%] . (lambda () (interactive) (exwm-workspace-move-window 5)))
+        ([?\s-^] . (lambda () (interactive) (exwm-workspace-move-window 6)))
+        ([?\s-&] . (lambda () (interactive) (exwm-workspace-move-window 7)))
+        ([?\s-*] . (lambda () (interactive) (exwm-workspace-move-window 8)))
+        ([?\s-\(] . (lambda () (interactive) (exwm-workspace-move-window 9)))
 
-          ;; Switch to window workspace with SUPER+SHIFT+{0-9}
-          ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-switch-create ,i))))
-                    (number-sequence 0 9))))
+        ;; Switch to window workspace with SUPER+SHIFT+{0-9}
+        ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
+        ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch-create 1)))
+        ([?\s-3] . (lambda () (interactive) (exwm-workspace-switch-create 2)))
+        ([?\s-4] . (lambda () (interactive) (exwm-workspace-switch-create 3)))
+        ([?\s-5] . (lambda () (interactive) (exwm-workspace-switch-create 4)))
+        ([?\s-6] . (lambda () (interactive) (exwm-workspace-switch-create 5)))
+        ([?\s-7] . (lambda () (interactive) (exwm-workspace-switch-create 6)))
+        ([?\s-8] . (lambda () (interactive) (exwm-workspace-switch-create 7)))
+        ([?\s-9] . (lambda () (interactive) (exwm-workspace-switch-create 8)))
+        ([?\s-0] . (lambda () (interactive) (exwm-workspace-switch-create 9)))))
 
+  (setq window-divider-default-bottom-width 2
+        window-divider-default-right-width 2)
+  (window-divider-mode)
 
   (exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
   ;; (perspective-exwm-mode)
@@ -233,6 +237,7 @@
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (cl-letf (((symbol-function #'process-list) (lambda ())))
     ad-do-it))
+
 ;; (defun bp/disable-desktop-notifications ()
 ;;   (interactive)
 ;;   (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_PAUSE\""))
