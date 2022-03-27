@@ -12,10 +12,10 @@
 ;; Font Settings
 (setq doom-font
       (font-spec
-       :family "VictorMono Nerd Font" :size 18)
+       :family "VictorMono Nerd Font" :size 20)
       doom-variable-pitch-font
       (font-spec
-       :family  "VictorMono Nerd Font" :size 18)
+       :family  "VictorMono Nerd Font" :size 20)
       doom-big-font
       (font-spec
        :family "VictorMono Nerd Font" :size 20))
@@ -94,37 +94,32 @@
 
   (add-hook! org-mode #'bp/fill-visual-column)
   (add-hook! markdown-mode #'bp/fill-visual-column)
-  (add-hook! dashboard-mode #'bp/fill-visual-column)
+  ;; (add-hook! dashboard-mode #'bp/fill-visual-column)
 
 
 
 (use-package! dashboard
   :init
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-week-agenda nil)
-  (setq dashboard-items '((recents  . 5)
-                          (bookmarks . 0)
-                          (projects . 5)
-                          (agenda . 5)))
-  (setq dashboard-startup-banner "~/.doom.d/banners/gnu.png")
-  ;; (add-hook! 'dashboard-mode-hook #'bp/fill-visual-column)
+  (setq dashboard-set-heading-icons t
+   dashboard-set-file-icons t
+   dashboard-center-content t
+   dashboard-week-agenda nil
+   dashboard-items '((recents  . 5)
+                          (agenda . 5))
+   dashboard-startup-banner "~/.doom.d/banners/gnu.png")
   :config
   (dashboard-setup-startup-hook))
 
-(use-package! vertigo-posframe
-  :after vertigo
-  :config
-  (setq vertico-posframe-parameters
+(require 'vertico-posframe)
+(setq vertico-posframe-parameters
         '((left-fringe . 16)
           (right-fringe . 16)))
-  (vertico-posframe-mode 1))
+(vertico-posframe-mode 1)
 
-(use-package! auto-dim-other-buffers
-  :config
-  (set-face-attribute 'auto-dim-other-buffers-face nil :background "#242837")
-
-  (add-hook! after-init #'auto-dim-other-buffers-mode))
+(require 'dimmer)
+(dimmer-configure-which-key)
+(dimmer-configure-posframe)
+(dimmer-mode t)
 
 (global-set-key (kbd "M-0") 'treemacs-select-window)
 (global-set-key (kbd "M-1") 'winum-select-window-1)

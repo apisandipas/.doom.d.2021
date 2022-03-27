@@ -48,6 +48,7 @@
    :repo "rougier/mu4e-dashboard"))
 
 (package! auto-dim-other-buffers)
+(package! dimmer)
 (package! stumpwm-mode)
 
 ;;; Streaming setup
