@@ -14,7 +14,10 @@
 (require 'bp-streaming)
 (require 'emacs-with-nyxt)
 
-(setq org-tags-column -77)
+;; Always open help in the main window frame
+(add-to-list 'display-buffer-alist
+        '("*Help*" display-buffer-same-window))
+;; (setq org-tags-column -77)
 
 (after! eshell
   (setq eshell-rc-script "~/.doom.d/eshell/profile"
@@ -26,17 +29,13 @@
         eshell-destroy-buffer-when-process-dies t))
 
 ;; Create a variable for our preferred tab width
-(setq-default tab-width 2)
-(setq indent-line-function 'insert-tab)
-(setq-default indent-tabs-mode nil)
-
+;; (setq indent-line-function 'insert-tab)
+;; (setq-default indent-tabs-mode nil)
+;; (setq-default tab-width 4)
 (setq inferior-lisp-program "sbcl")
 
-;; Supress GC notices
-(setq garbage-collection-messages nil)
-
-(or (get-buffer "*dashboard*")
-    (get-buffer "*scratch*"))
+;; (or (get-buffer "*dashboard*")
+;;     (get-buffer "*scratch*"))
 
 (after! circe
   (set-irc-server! "irc.libera.chat"

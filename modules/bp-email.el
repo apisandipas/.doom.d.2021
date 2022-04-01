@@ -42,7 +42,6 @@
 ;; attachments go here
 (setq mu4e-attachment-dir  "~/Downloads")
 
-                                        ; start with the first (default) context;
 (setq mu4e-context-policy 'ask)
 
 ;; ask for context if no context matches;

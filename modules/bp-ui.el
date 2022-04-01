@@ -42,9 +42,6 @@
   (dimmer-configure-posframe)
   (dimmer-mode t)
 
-  ;; Always open help in the main window frame
-  (add-to-list 'display-buffer-alist
-               '("*Help*" display-buffer-same-window))
 
   (add-hook 'temp-buffer-setup-hook 'split-vertically-for-temp-buffers)
 
