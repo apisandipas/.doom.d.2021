@@ -13,7 +13,7 @@
 (map! :leader
       :prefix ("b" . "buffers")
       :desc "Switch Buffers"
-      "w" #'ivy-switch-buffer-other-window)
+      "w" #'ivy-switch-buffer)
 
 (map! :leader
       :prefix ("h". "help")
@@ -21,8 +21,9 @@
       "t" #'counsel-load-theme)
 
 (map! :leader
+      :prefix ("b". "buffer")
       :desc "Clone indirect buffer other window"
-      "b c" #'clone-indirect-buffer-other-window)
+      "c" #'clone-indirect-buffer-other-window)
 
 
 (map! :leader

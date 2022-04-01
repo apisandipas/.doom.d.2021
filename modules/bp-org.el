@@ -1,5 +1,10 @@
 ;; -*- lexical-binding: t; -*-
 ;; Run tangle in the current file
+;;
+;;
+
+(setq bp/org-inbox-file "inbox.org")
+
 (map! :map org-mode-map
       :localleader
       :desc "Org babel tangle"
@@ -10,9 +15,23 @@
   :config
   (org-auto-tangle-mode 1))
 
-(use-package! org-toc
+(use-package! org-appear
+  :hook (org-mode . org-appear-mode)
   :config
-  (add-hook! org-mode #'toc-org-mode))
+  (setq org-appear-trigger 'always
+        org-appear-delay 0.0
+        org-appear-autolinks t)
+
+  (org-appear-mode 1))
+
+
+(use-package! org-mobile-sync
+  :config
+  (setq org-mobile-inbox-for-pull "~/org/from-mobile.org")
+  (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/")
+  (org-mobile-sync-mode 1))
+
+
 
 ;;; Customize org-mode font setup
 (defun bp/org-font-setup ()
@@ -109,30 +128,61 @@
         '((sequence "TODO(t)" "APPT(a)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "CANCELLED(C)" "|" "DONE(d)")
           (type "[ ](c)" "PROJ(p)" "SOMEDAY(s)" "LOOP(r)" "|" "[x](x)")))
 
+
+;;;  TODO This is clearly superiour syntax but will need to consider
+;;;  capture template strucrture changes
+  ;; (setq org-capture-templates
+  ;;       (doct '(("Todo" :keys "t"
+  ;;                :file bp/org-inbox-file
+  ;;                :prepend t
+  ;;                :template ( "* %{todo-state} %^{Description}"
+  ;;                            ":PROPERTIES:"
+  ;;                            ":Created: %U"
+  ;;                            ":END:"
+  ;;                            "%?")
+  ;;                :children (("First Child"  :keys "1"
+  ;;                          :headline   "One"
+  ;;                          :todo-state "TODO"
+  ;;                          :hook (lambda () (message "\"First Child\" selected.")))
+  ;;                         ("Second Child" :keys "2"
+  ;;                          :headline   "Two"
+  ;;                          :todo-state "NEXT")
+  ;;                         ("Third Child"  :keys "3"
+  ;;                          :headline   "Three"
+  ;;                          :todo-state "MAYBE"))
+  ;;                )))
+  ;;       )
+
+
   (setq org-capture-templates
         ;; Generic todo entry
         `(("t" "Todo" entry  (file+headline "inbox.org" "Todos Inbox")
            ,(concat "* TODO %?\n" "/Entered on/ %U"))
 
-                ;; User by Org protocol to capture a note to the inbox
+          ;; User by Org protocol to capture a note to the inbox
           ("p" "Protocol" entry (file+headline "inbox.org" "Notes Inbox")
            "* %a\nCaptured On: %U\nWebsite: %l\n\n%i\n%?")
 
-                ;; Used by org protocol to capture a link to the inbox
+          ;; Used by org protocol to capture a link to the inbox
           ("L" "Protocol Link" entry (file+headline "inbox.org" "Links Inbox")
            "* %? [[%:link][%:description]] \nCaptured On: %U")
 
-                ;; Adds a new medical appointment to the Agenda
+          ;; These come in from Nyxt. It can probably be merged with the Protocol Link one above.
+          ;; TODO: Consider merging these two use cases.
+          ("w" "Web link" entry (file+headline "inbox.org" "Links")
+           "* %?%a\n:SCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+1d\"))\n")
+
+          ;; Adds a new medical appointment to the Agenda
           ("a" "Appointment" entry  (file+headline "agenda.org" "Future")
            ,(concat "* APPT %? :appointment:\n"
                     "<%<%Y-%m-%d %a %H:00>>"))
 
-                ;; One-off fleeting notes go here.
+          ;; One-off fleeting notes go here.
           ("n" "Note" entry  (file "notes.org")
            ,(concat "* Note (%a)\n"
                     "/Entered on/ %U\n" "\n" "%?"))
 
-                ;; Use as part of email workflow to schedule replies
+          ;; Use as part of email workflow to schedule replies
           ("@" "Inbox [mu4e]" entry (file "inbox.org")
            ,(concat "* TODO Reply to \"%a\" %?\n"
                     "/Entered on/ %U")))))
@@ -165,6 +215,16 @@
         org-gcal-fetch-file-alist '(
                                     ("bparonto@gmail.com" .  "~/org/agenda.org")
                                     ("4tc3t9c2hef41n7dc461idql8k@group.calendar.google.com". "~/org/agenda.org"))))
+
+
+(add-hook 'focus-in-hook
+  (lambda () (progn
+    (setq org-tags-column       90)) (org-align-all-tags)))
+
+(add-hook 'focus-out-hook
+  (lambda () (progn
+    (setq org-tags-column (- 0 (window-body-width)))) (org-align-all-tags)))
+
 
 
 (provide 'bp-org)

@@ -16,7 +16,7 @@
 ^Stream^            ^Scenes^          ^Actions^
 ^^^^^^^^-------------------------------------------------
 _sb_: Stream begin  _C_: Small Screen _o_: Open Twitch
-_se_: Stream end    _u_: Close Up     _m_: Send Message
+_se_: Stream end    _u_: Close Up     _m_: Macbook
 _c_: Connect        _b_: BRB
 "
     ("t" org-roam-dailies-goto-today)
@@ -24,9 +24,8 @@ _c_: Connect        _b_: BRB
     ("C" (obs-websocket-send "SetCurrentScene" :scene-name "Small Screen") )
     ("u" (obs-websocket-send "SetCurrentScene" :scene-name "Close Up") )
     ("b" (obs-websocket-send "SetCurrentScene" :scene-name "Card - BRB") )
+    ("m" (obs-websocket-send "SetCurrentScene" :scene-name "Macbook") )
     ("o" (browse-url "https://twitch.tv/facetious_coding"))
-    ("m" bp/twitch-message "Message")
-    ("t" bp/twitch-message "Message")
     ("<f8>" bp/twitch-message "Message") ;; Then I can just f8 f8
     ("sb" (obs-websocket-send "StartStreaming") )
     ("se" (obs-websocket-send "StopStreaming") ))

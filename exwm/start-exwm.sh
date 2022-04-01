@@ -3,9 +3,7 @@
 # xrdb ~/.emacs.d/exwm/Xresources
 
 xautolock -time 120 -locker 'betterlockscreen -l dim' &
-fix_xcursor &
 picom -b --config ~/.doom.d/exwm/picom.conf
-# Enable screen locking on suspend
 
 # Fire it up
-exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.doom.d/desktop.el
+exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.doom.d/exwm/desktop.el

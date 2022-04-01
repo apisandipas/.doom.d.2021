@@ -23,7 +23,7 @@
        (company +childframe)           ; the ultimate code completion backend
        ;; (helm +childframe)              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ;; (ivy +childframe)               ; a search engine for love and life
+       (ivy +childframe)               ; a search engine for love and life
        (vertico +icons)           ; the search engine of the future
 
        :ui
@@ -189,8 +189,8 @@
        emms
        everywhere        ; *leave* Emacs!? You must be joking
        irc               ; how neckbeards socialize
-       rss        ; emacs as an RSS reader
-       twitter           ; twitter client https://twitter.com/vnought
+       (rss +org)        ; emacs as an RSS reader
+       ;; twitter           ; twitter client https://twitter.com/vnought
 
        :config
        ;; literate

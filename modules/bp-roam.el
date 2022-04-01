@@ -27,11 +27,23 @@
                                                   '(:immediate-finish t)))))
     (apply #'org-roam-node-insert args)))
 
+(defun bp/org-roam-topic-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (cons arg args))
+        (org-roam-capture-templates (list (append (second org-roam-capture-templates)
+                                                  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
+
 
 (map! :leader
       :prefix ("n" "notes")
       :desc "Insert note immediately"
       "rI" #'bp/org-roam-node-insert-immediate)
+
+(map! :leader
+      :prefix ("n" "notes")
+      :desc "Insert topic node immediately"
+      "rT" #'bp/org-roam-topic-node-insert-immediate)
 
 (use-package! org-roam
   :commands (org-roam-insert org-roam-find-file org-roam org-roam-show-graph)

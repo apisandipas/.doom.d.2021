@@ -14,16 +14,26 @@
 (package! org-auto-tangle)
 (package! org-superstar)
 (package! org-super-agenda)
-
+(package! toc-org)
+(package! org-appear)
+(package! org-mobile-sync)
 ;; unused
 (package! doct)
 
+(package! leuven-theme)
 (package! vertico-posframe)
 
+;;; Additons Elfeed Packages
+(package! elfeed-dashboard)
 (package! elfeed-goodies)
 
 (package! visual-fill-column)
 (package! dashboard)
+(package! youtube-dl
+  :recipe
+  (:host github
+   :repo "skeeto/youtube-dl-emacs"))
+
 (package! ligature
   :recipe
   (:host github
@@ -42,12 +52,15 @@
   (:host github
    :repo "elken/doom-modeline-exwm"))
 
+(package! mu4e-thread-folding
+  :recipe
+  (:host github
+   :repo "rougier/mu4e-thread-folding"))
 (package! mu4e-dashboard
   :recipe
   (:host github
    :repo "rougier/mu4e-dashboard"))
 
-(package! auto-dim-other-buffers)
 (package! dimmer)
 (package! stumpwm-mode)
 
@@ -56,3 +69,7 @@
 (package! obs-websocket
   :recipe
   (:host github :repo "sachac/obs-websocket-el"))
+
+
+;;; Nyxt hacker browser goodnes
+(package! engine-mode)

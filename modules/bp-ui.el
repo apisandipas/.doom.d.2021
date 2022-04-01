@@ -1,13 +1,26 @@
 ;; -*- lexical-binding: t; -*-
 ;;; UI Adjustments
 
-(add-to-list 'default-frame-alist '(mouse-color . "white"))
-(set-frame-parameter (selected-frame) 'alpha '(75 . 80))
-(add-to-list 'default-frame-alist '(alpha . (75 . 80)))
+;; (add-to-list 'default-frame-alist
+;;              '(mouse-color . "white")
+;;              )
+;; (set-frame-parameter (selected-frame) 'alpha '(75 . 80))
+;; (set-frame-parameter (selected-frame) 'internal-border-width 24)
+;; (add-to-list 'default-frame-alist
+;;              '(alpha . (75 . 80))
+;;              '(internal-border-width . 24))
 
+;; This assures all frame open with the same paremeters, not just the first one.
+(modify-all-frames-parameters
+ '((right-divider-width . 24)
+   (alpha . (75 . 80))
+   (mouse-color . "white")
+   (internal-border-width . 24)))
+
+(setf org-auto-align-tags nil)
 (setq display-line-numbers-type 'relative)
-
 (setq standard-indent 2)
+(setq-default indent-tabs-mode nil)
 
 ;; Font Settings
 (setq doom-font
@@ -24,16 +37,16 @@
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic))
 
-(setq garbage-collection-messages nil)
-
+;; Always open help in the main window frame
+(add-to-list 'display-buffer-alist
+             '("*Help*" display-buffer-same-window))
 
 ;;;;; Set theme
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  ;; (setq doom-theme 'doom-vibrant)
-  ;; (setq doom-theme 'modus-vivendi)
-  (setq doom-theme 'doom-moonlight))
+  (load-theme 'doom-vibrant t))
+
 
 
 (use-package ligature
@@ -54,11 +67,13 @@
                 "\\\\" "://"))
   (global-ligature-mode t))
 
-(defun split-horizontally-for-temp-buffers ()
+;; This remains untestes as of 22-04-01
+(defun split-vertically-for-temp-buffers ()
   "Split the window horizontally for temp buffers."
   (when (one-window-p t)
-    (split-window-horizontally)))
-(add-hook 'temp-buffer-setup-hook 'split-horizontally-for-temp-buffers)
+    (split-window-vertically)))
+(add-hook 'temp-buffer-setup-hook 'split-vertically-for-temp-buffers)
+
 
 ;; Removed dupe 'evil-' from which-key labels
 (after! which-key
@@ -71,22 +86,21 @@
 ;; Modeline Config
 (add-hook! after-init
   (lambda ()  (setq doom-modeline-height 36
-                    doom-modeline-bar-width 6
-                    doom-modeline-lsp t
-                    doom-modeline-github nil
-                    doom-modeline-mu4e nil
-                    doom-modeline-irc nil
-                    doom-modeline-minor-modes nil
-                    doom-modeline-persp-name t
-                    doom-modeline-buffer-file-name-style 'truncate-except-project
-                    doom-modeline-major-mode-icon t)
-    (custom-set-faces '(mode-line ((t (:height 0.85))))
-                      '(mode-line-inactive ((t (:height 0.85)))))))
+               doom-modeline-bar-width 6
+               doom-modeline-lsp t
+               doom-modeline-github nil
+               doom-modeline-mu4e nil
+               doom-modeline-irc nil
+               doom-modeline-minor-modes nil
+               doom-modeline-persp-name t
+               doom-modeline-buffer-file-name-style 'truncate-except-project
+               doom-modeline-major-mode-icon t)
+    ;; (custom-set-faces '(mode-line ((t (:height 0.85))))
+    ;;                   '(mode-line-inactive ((t (:height 0.85))))
+    ;;                   )
 
-;; (use-package! visual-fill-column
-;;   :config
-;;   (setq visual-fill-column-center-text t
-;;         visual-fill-column-width 120)
+    ))
+
 (defun bp/fill-visual-column ()
   (setq visual-fill-column-center-text t
         visual-fill-column-width 120)
@@ -94,7 +108,6 @@
 
   (add-hook! org-mode #'bp/fill-visual-column)
   (add-hook! markdown-mode #'bp/fill-visual-column)
-  ;; (add-hook! dashboard-mode #'bp/fill-visual-column)
 
 
 
@@ -117,9 +130,9 @@
 (vertico-posframe-mode 1)
 
 (require 'dimmer)
-(dimmer-configure-which-key)
-(dimmer-configure-posframe)
-(dimmer-mode t)
+ (dimmer-configure-which-key)
+ (dimmer-configure-posframe)
+ (dimmer-mode t)
 
 (global-set-key (kbd "M-0") 'treemacs-select-window)
 (global-set-key (kbd "M-1") 'winum-select-window-1)

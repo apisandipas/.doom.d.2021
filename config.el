@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-;; Start up the daemon is not alreay unning
+(setq garbage-collection-messages nil)
 
 (add-to-list 'load-path "~/.doom.d/modules/")
 
@@ -12,6 +12,9 @@
 (require 'bp-email)
 (require 'bp-presentations)
 (require 'bp-streaming)
+(require 'emacs-with-nyxt)
+
+(setq org-tags-column -77)
 
 (after! eshell
   (setq eshell-rc-script "~/.doom.d/eshell/profile"
@@ -29,6 +32,9 @@
 
 (setq inferior-lisp-program "sbcl")
 
+;; Supress GC notices
+(setq garbage-collection-messages nil)
+
 (or (get-buffer "*dashboard*")
   (get-buffer "*scratch*"))
 
@@ -40,4 +46,16 @@
       :sasl-password "qwerty1234"
       :channels ("#emacs" "#chat" "#javascript" "#guix" "#react" "#chicago"))))
 
+;; Make comments more readable.
+;; TODO: Change to a better color. This one is #bada55 :D
+(set-face-attribute 'font-lock-comment-face nil
+                    :foreground "#bada55")
 
+(use-package! youtube-dl)
+(use-package! engine-mode)
+
+(defengine duckduckgo
+  "https://duckduckgo.com/?q=%s"
+  :keybinding "n"
+  :browser 'browse-url-nyxt)
+(setq browse-url-browser-function 'browse-url-nyxt)

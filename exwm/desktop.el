@@ -23,7 +23,8 @@
 (defun bp/start-panel ()
   (interactive)
   (bp/kill-panel)
-  (setq bp/polybar-process (start-process-shell-command "polybar" nil "polybar -c ~/.doom.d/exwm/polybar.config.ini --reload main")))
+  (setq bp/polybar-process (start-process-shell-command "polybar" nil "polybar -c ~/.doom.d/exwm/polybar.config.ini --reload main"))
+  )
 
 (defun bp/send-polybar-hook (module-name hook-index)
   (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
@@ -55,7 +56,7 @@
   (exwm-workspace-switch-create 0)
 
   ;; Useless gaps
-  (exwm-outer-gaps-mode 1)
+  (exwm-outer-gaps-mode -1)
 
   ;; Show the time and date in modeline
   (setq display-time-day-and-date nil)
@@ -65,6 +66,7 @@
   (bp/start-panel)
 
   ;; Launch apps that will run in the background
+  (bp/run-in-background "dropbox")
   (bp/run-in-background "nm-applet")
   (bp/run-in-background "pasystray")
   (bp/run-in-background "blueman-applet")
@@ -92,7 +94,8 @@
   (message "Display config: %s"
            (string-trim (shell-command-to-string "autorandr --current"))))
 
-
+(unless (server-running-p "default")
+  (server-start t t))
 
 (use-package exwm
   :config
@@ -137,7 +140,6 @@
   (add-hook 'exwm-randr-screen-change-hook #'bp/update-displays)
   (bp/update-displays)
 
-
   ;; Set the wallpaper after changing the resolution
   (bp/set-wallpaper)
 
@@ -152,7 +154,12 @@
   (require 'exwm-firefox-evil)
   (add-hook 'exwm-manage-finish-hook 'exwm-firefox-evil-activate-if-firefox)
 
-  ;; These keys should always pass through to Emacs
+;;; Start these app in char mode so as to avoid.
+  (setq exwm-manage-configurations
+        '(((member exwm-class-name '("Emacs" "kitty" "Nyxt"))
+	   char-mode t)))
+
+  ;; these keys should always pass through to Emacs
   (setq exwm-input-prefix-keys
         '(?\C-x
           ?\C-u
@@ -170,48 +177,57 @@
   ;; Ctrl+Q will enable the next key to be sent directly
   (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
 
+;;;  TODO: This is may have larger implications
+;;;  TODO: Look into methods to move cursor to other frames, like i have set up in Stumpwm
+  (general-def :keymaps 'override
+    "s-h" 'windmove-left
+    "s-l" 'windmove-right
+    "s-j" 'windmove-down
+    "s-k" 'windmove-up
+    )
+
   ;; Set up global key bindings.  These always work, no matter the input state!
   ;; Keep in mind that changing this list after EXWM initializes has no effect.
   (setq exwm-input-global-keys
         `(
-                                ;; Move between windows
+          ;; Move between windows
           ([s-left] . windmove-left)
           ([s-right] . windmove-right)
           ([s-up] . windmove-up)
           ([s-down] . windmove-down)
 
-                                ;; Launch applications via shell command
-          ([?\s-&] . (lambda (command)
-                       (interactive (list (read-shell-command "$ ")))
+          ;; ;; Launch applications via shell command
+          ([?\s-\\] . (lambda (command)
+                       (interactive (list (read-shell-command " ")))
                        (start-process-shell-command command nil command)))
 
-        ;; Switch workspace
-        ;; ([?\s-w] . exwm-workspace-switch)
-        ([?\s-w] . switch-to-buffer-other-window)
-        ;;
-        ;; move window workspace with SUPER+SHIFT+{0-9}
-        ([?\s-\)] . (lambda () (interactive) (exwm-workspace-move-window 0)))
-        ([?\s-!] . (lambda () (interactive) (exwm-workspace-move-window 1)))
-        ([?\s-\@] . (lambda () (interactive) (exwm-workspace-move-window 2)))
-        ([?\s-#] . (lambda () (interactive) (exwm-workspace-move-window 3)))
-        ([?\s-$] . (lambda () (interactive) (exwm-workspace-move-window 4)))
-        ([?\s-%] . (lambda () (interactive) (exwm-workspace-move-window 5)))
-        ([?\s-^] . (lambda () (interactive) (exwm-workspace-move-window 6)))
-        ([?\s-&] . (lambda () (interactive) (exwm-workspace-move-window 7)))
-        ([?\s-*] . (lambda () (interactive) (exwm-workspace-move-window 8)))
-        ([?\s-\(] . (lambda () (interactive) (exwm-workspace-move-window 9)))
+          ;; Switch workspace
+          ;; ([?\s-w] . exwm-workspace-switch)
+          ([?\s-w] . switch-to-buffer-other-window)
+          ;;
+          ;; move window workspace with SUPER+SHIFT+{0-9}
+          ,@(cl-mapcar (lambda (c n)
+                         `(,(kbd (format "s-%c" c)) .
+                           (lambda ()
+                             (interactive)
+                             (exwm-workspace-move-window ,n)
+                             ;; (exwm-workspace-switch ,n)
+                             )))
+                       '(?! ?@ ?# ?$ ?% ?^ ?& ?* ?\( ?\))
+                       ;; '(?\) ?! ?@ ?# ?$ ?% ?^ ?& ?* ?\()
+                       (number-sequence 0 9))
 
-        ;; Switch to window workspace with SUPER+SHIFT+{0-9}
-        ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
-        ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch-create 1)))
-        ([?\s-3] . (lambda () (interactive) (exwm-workspace-switch-create 2)))
-        ([?\s-4] . (lambda () (interactive) (exwm-workspace-switch-create 3)))
-        ([?\s-5] . (lambda () (interactive) (exwm-workspace-switch-create 4)))
-        ([?\s-6] . (lambda () (interactive) (exwm-workspace-switch-create 5)))
-        ([?\s-7] . (lambda () (interactive) (exwm-workspace-switch-create 6)))
-        ([?\s-8] . (lambda () (interactive) (exwm-workspace-switch-create 7)))
-        ([?\s-9] . (lambda () (interactive) (exwm-workspace-switch-create 8)))
-        ([?\s-0] . (lambda () (interactive) (exwm-workspace-switch-create 9)))))
+          ;; Switch to window workspace with SUPER+{0-9}
+          ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
+          ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch-create 1)))
+          ([?\s-3] . (lambda () (interactive) (exwm-workspace-switch-create 2)))
+          ([?\s-4] . (lambda () (interactive) (exwm-workspace-switch-create 3)))
+          ([?\s-5] . (lambda () (interactive) (exwm-workspace-switch-create 4)))
+          ([?\s-6] . (lambda () (interactive) (exwm-workspace-switch-create 5)))
+          ([?\s-7] . (lambda () (interactive) (exwm-workspace-switch-create 6)))
+          ([?\s-8] . (lambda () (interactive) (exwm-workspace-switch-create 7)))
+          ([?\s-9] . (lambda () (interactive) (exwm-workspace-switch-create 8)))
+          ([?\s-0] . (lambda () (interactive) (exwm-workspace-switch-create 9)))))
 
   (setq window-divider-default-bottom-width 2
         window-divider-default-right-width 2)
@@ -238,17 +254,6 @@
   (cl-letf (((symbol-function #'process-list) (lambda ())))
     ad-do-it))
 
-;; (defun bp/disable-desktop-notifications ()
-;;   (interactive)
-;;   (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_PAUSE\""))
-
-;; (defun bp/enable-desktop-notifications ()
-;;   (interactive)
-;;   (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_RESUME\""))
-
-;; (defun bp/toggle-desktop-notifications ()
-;;   (interactive)
-;;   (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_TOGGLE\""))
 
 (defun exwm-input-line-mode ()
   "Set exwm window to line-mode and show mode line"
@@ -275,3 +280,4 @@
                       (interactive)
                       (exwm-input-toggle-mode)
                       (org-capture)))
+
