@@ -1,6 +1,6 @@
 #+title: Bryan's Literate Config 2022
 
-* TABLE OF CONTENTS                                                                       :TOC:
+* Table of Contents                                                            :TOC:
 - [[#about][About]]
 - [[#user-interface-tweaks][User Interface Tweaks]]
   - [[#frame-settings][Frame Settings]]

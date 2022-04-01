@@ -50,6 +50,15 @@
 
 (defun bp/exwm-init-hook ()
 
+
+    (modify-all-frames-parameters
+     '((right-divider-width . 24)
+       (alpha . (75 . 80))
+       (mouse-color . "white")
+       (internal-border-width . 24)))
+
+
+
   (doom-mark-buffer-as-real-h)
 
   ;; Make workspace 1 be the one where we land at startup

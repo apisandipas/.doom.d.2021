@@ -36,7 +36,7 @@
 (setq garbage-collection-messages nil)
 
 (or (get-buffer "*dashboard*")
-  (get-buffer "*scratch*"))
+    (get-buffer "*scratch*"))
 
 (after! circe
   (set-irc-server! "irc.libera.chat"
