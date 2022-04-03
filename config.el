@@ -43,7 +43,7 @@
       :port 6697
       :sasl-username "apis_and_ipas"
       :sasl-password "qwerty1234"
-      :channels ("#emacs" "#chat" "#javascript" "#guix" "#react" "#chicago"))))
+      :channels ("#emacs" "#chat" "#javascript" "#guix" "#react" "#chicago" "#stumpwm" "#sbcl"))))
 
 ;; Make comments more readable.
 ;; TODO: Change to a better color. This one is #bada55 :D
