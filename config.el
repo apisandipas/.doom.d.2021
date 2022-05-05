@@ -1,8 +1,11 @@
 ;; -*- lexical-binding: t; -*-
 
+(server-start)
+
 (setq garbage-collection-messages nil)
 
 (add-to-list 'load-path "~/.doom.d/modules/")
+
 
 (require 'bp-keybinds)
 (require 'bp-ui)
@@ -18,6 +21,8 @@
 (add-to-list 'display-buffer-alist
         '("*Help*" display-buffer-same-window))
 ;; (setq org-tags-column -77)
+(setq default-tab-width 2)
+(setq typescript-indent-level 2)
 
 (after! eshell
   (setq eshell-rc-script "~/.doom.d/eshell/profile"
@@ -28,21 +33,15 @@
         eshell-scroll-to-bottom-on-input t
         eshell-destroy-buffer-when-process-dies t))
 
-;; Create a variable for our preferred tab width
-;; (setq indent-line-function 'insert-tab)
-;; (setq-default indent-tabs-mode nil)
-;; (setq-default tab-width 4)
 (setq inferior-lisp-program "sbcl")
-
-;; (or (get-buffer "*dashboard*")
-;;     (get-buffer "*scratch*"))
 
 (after! circe
   (set-irc-server! "irc.libera.chat"
     '(:tls t
       :port 6697
-      :sasl-username "apis_and_ipas"
-      :sasl-password "qwerty1234"
+      :nick "apis_and_ipas"
+      :sasl-username ,(+pass-get-user "Chats/Libera")
+      :sasl-password (lambda (&rest _) (+pass-get-secret "Chats/Libera"))
       :channels ("#emacs" "#chat" "#javascript" "#guix" "#react" "#chicago"))))
 
 ;; Make comments more readable.
@@ -53,8 +52,8 @@
 (use-package! youtube-dl)
 (use-package! engine-mode)
 
-(defengine duckduckgo
-  "https://duckduckgo.com/?q=%s"
-  :keybinding "n"
-  :browser 'browse-url-nyxt)
-(setq browse-url-browser-function 'browse-url-nyxt)
+;; (defengine duckduckgo
+;;   "https://duckduckgo.com/?q=%s"
+;;   :keybinding "n"
+;;   :browser 'browse-url-nyxt)
+(setq browse-url-browser-function 'browse-url-firefox)

@@ -33,6 +33,7 @@
   (bp/send-polybar-hook "exwm-workspace" 1))
 
 (defun bp/polybar-exwm-workspace ()
+  (interactive)
   (pcase exwm-workspace-current-index
     (0 "  Dev")
     (1 "  Term")
@@ -50,14 +51,11 @@
 
 (defun bp/exwm-init-hook ()
 
-
     (modify-all-frames-parameters
-     '((right-divider-width . 24)
+     '((right-divider-width . 0)
        (alpha . (75 . 80))
        (mouse-color . "white")
        (internal-border-width . 24)))
-
-
 
   (doom-mark-buffer-as-real-h)
 
@@ -80,7 +78,7 @@
   (bp/run-in-background "pasystray")
   (bp/run-in-background "blueman-applet")
   (bp/run-in-background "blueman-tray")
-  (bp/run-in-background "dunst -geom \"380x50-10+38\" -frame_width \"1\" -font \"Victor Mono Medium 14\""))
+  (bp/run-in-background "dunst"))
 
 ;; (bp/run-in-background "serve ~/org/brain/bins/agenda -p 8989")
 
@@ -102,9 +100,6 @@
   (bp/set-wallpaper)
   (message "Display config: %s"
            (string-trim (shell-command-to-string "autorandr --current"))))
-
-(unless (server-running-p "default")
-  (server-start t t))
 
 (use-package exwm
   :config
@@ -289,4 +284,3 @@
                       (interactive)
                       (exwm-input-toggle-mode)
                       (org-capture)))
-

@@ -50,8 +50,8 @@
   "Beautify Org Checkbox Symbol"
   (setq prettify-symbols-alist
         (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                '(("#+begin_src" . ?)
-                  ("#+end_src" . ?ﰵ)
+                '(("#+begin_src" . ?)
+                  ("#+end_src" . ?)
                   ("#+begin_example" . ?)
                   ("#+end_example" . ?)
                   ("#+begin_quote" . ?)
@@ -76,6 +76,7 @@
 
 ;;; Org Mode config
 (after! org
+  (require 'ob-typescript)
   (require 'org-protocol)
   (require 'org-protocol-capture-html)
   (setq
@@ -84,7 +85,13 @@
    org-ellipsis "▼"
    org-default-notes-file (expand-file-name "notes.org" org-directory)
    org-log-done 'time
+   org-tags-column -80
    org-hide-emphasis-markers t)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((typescript . t)
+     ))
 
   (setq org-agenda-custom-commands
         '(("c" . "📦 Contexts")

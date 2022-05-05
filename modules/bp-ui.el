@@ -7,10 +7,10 @@
   (visual-fill-column-mode 1))
 
 ;; This remains untestes as of 22-04-01
-(defun split-vertically-for-temp-buffers ()
+(defun split-horizontally-for-temp-buffers ()
   "Split the window horizontally for temp buffers."
   (when (one-window-p t)
-    (split-window-vertically)))
+    (split-window-horizontally)))
 
 ;; This assures all frame open with the same paremeters, not just the first one.
 (use-package! emacs
@@ -51,13 +51,13 @@
 ;; Font Settings
 (setq doom-font
       (font-spec
-       :family "VictorMono Nerd Font" :size 20)
+       :family "VictorMono Nerd Font" :size 16)
       doom-variable-pitch-font
       (font-spec
-       :family  "VictorMono Nerd Font" :size 20)
+       :family  "VictorMono Nerd Font" :size 16)
       doom-big-font
       (font-spec
-       :family "VictorMono Nerd Font" :size 20))
+       :family "VictorMono Nerd Font" :size 16))
 
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
@@ -67,7 +67,10 @@
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  (load-theme 'doom-vibrant t))
+  ;; (load-theme 'modus-vivendi t)
+  )
+
+  (load-theme 'modus-vivendi t)
 
 (use-package ligature
   :config

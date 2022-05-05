@@ -17,6 +17,7 @@
 (package! toc-org)
 (package! org-appear)
 (package! org-mobile-sync)
+(package! ob-typescript)
 ;; unused
 (package! doct)
 
