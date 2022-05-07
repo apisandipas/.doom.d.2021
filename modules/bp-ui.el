@@ -70,7 +70,11 @@
   ;; (load-theme 'modus-vivendi t)
   )
 
-  (load-theme 'modus-vivendi t)
+
+(setq
+ modus-themes-bold-constructs t
+ modus-themes-italic-constructs t)
+(load-theme 'modus-vivendi t)
 
 (use-package ligature
   :config

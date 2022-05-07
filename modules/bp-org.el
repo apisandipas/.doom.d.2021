@@ -37,8 +37,8 @@
 (defun bp/org-font-setup ()
   (interactive)
   (custom-set-faces
-   '(org-level-1 ((t (:inherit outline-1 :height 1.4 ))))
-   '(org-level-2 ((t (:inherit outline-2 :height 1.3 ))))
+   '(org-level-1 ((t (:inherit outline-1 :height 1.3 ))))
+   '(org-level-2 ((t (:inherit outline-2 :height 1.25 ))))
    '(org-level-3 ((t (:inherit outline-3 :height 1.2 ))))
    '(org-level-4 ((t (:inherit outline-4 :height 1.1 ))))
    '(org-level-5 ((t (:inherit outline-5 :height 1.0 ))))))
@@ -194,10 +194,10 @@
            ,(concat "* TODO Reply to \"%a\" %?\n"
                     "/Entered on/ %U")))))
 
-;; (use-package org-superstar
-;;   :config
-;;   (setq org-superstar-item-bullet-alist '((?+ . ?➤) (?- . ?✦)))
-;;   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+(use-package org-superstar
+  :config
+  (setq org-superstar-item-bullet-alist '((?+ . ?➤) (?- . ?✦)))
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
 (use-package! org-super-agenda
   :commands org-super-agenda-mode
