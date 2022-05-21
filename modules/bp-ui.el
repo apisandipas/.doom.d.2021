@@ -20,6 +20,13 @@
   (setq standard-indent 2)
   (setq-default indent-tabs-mode nil)
 
+  ;; Vertical window divider
+  (set-face-foreground 'window-divider "black")
+  (set-face-background 'header-line "black")
+  (setq window-divider-default-right-width 24)
+  (setq window-divider-default-places 'right-only)
+  (window-divider-mode 1)
+
   (require 'winum)
   (global-set-key (kbd "M-0") 'treemacs-select-window)
   (global-set-key (kbd "M-1") 'winum-select-window-1)

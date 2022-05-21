@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
-(server-start)
+;; (server-start)
+
 
 (setq garbage-collection-messages nil)
 
@@ -18,13 +19,13 @@
 (require 'emacs-with-nyxt)
 
 ;; Always open help in the main window frame
-(add-to-list 'display-buffer-alist
-        '("*Help*" display-buffer-same-window))
 ;; (setq org-tags-column -77)
-(setq default-tab-width 2)
-(setq typescript-indent-level 2)
+;; (setq default-tab-width 2)
+;; (setq typescript-indent-level 2)
 
-(after! eshell
+
+(use-package! eshell
+  :config
   (setq eshell-rc-script "~/.doom.d/eshell/profile"
         eshell-aliases-file "~/.doom.d/eshell/aliases"
         eshell-history-size 5000
@@ -35,7 +36,8 @@
 
 (setq inferior-lisp-program "sbcl")
 
-(after! circe
+(use-package! circe
+  :config
   (set-irc-server! "irc.libera.chat"
     '(:tls t
       :port 6697
@@ -46,11 +48,11 @@
 
 ;; Make comments more readable.
 ;; TODO: Change to a better color. This one is #bada55 :D
-(set-face-attribute 'font-lock-comment-face nil
-                    :foreground "#bada55")
+;; (set-face-attribute 'font-lock-comment-face nil
+;;                     :foreground "#bada55")
 
 (use-package! youtube-dl)
-(use-package! engine-mode)
+;; (use-package! engine-mode)
 
 ;; (defengine duckduckgo
 ;;   "https://duckduckgo.com/?q=%s"

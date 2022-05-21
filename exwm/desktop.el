@@ -23,7 +23,8 @@
 (defun bp/start-panel ()
   (interactive)
   (bp/kill-panel)
-  (setq bp/polybar-process (start-process-shell-command "polybar" nil "polybar -c ~/.doom.d/exwm/polybar.config.ini --reload main"))
+  (bp/run-in-background "~/.doom.d/exwm/polybar.launch.sh")
+  ;; (setq bp/polybar-process (start-process-shell-command "polybar" nil "sh ~/.doom.d/exwm/polybar.launch.sh"))
   )
 
 (defun bp/send-polybar-hook (module-name hook-index)
@@ -96,6 +97,7 @@
 
 ;; This function should be used only after configuring autorandr!
 (defun bp/update-displays ()
+  (interactive)
   (bp/run-in-background "autorandr --change --force")
   (bp/set-wallpaper)
   (message "Display config: %s"
@@ -120,23 +122,24 @@
   ;; Set the screen resolution (update this to be the correct resolution for your screen!)
   (require 'exwm-randr)
   (exwm-randr-enable)
-  (start-process-shell-command "xrandr" nil "xrandr --output eDP-1 --mode 1920x1080  --auto\
-        --output DVI-I-1-1 --rotate right --left-of eDP-1 --mode 1920x1080 --auto \
-        --output DVI-I-2-2 --mode 1920x1080 --left-of DVI-I-1-1  --auto")
+  (start-process-shell-command "xrandr" nil "xrandr --output DP-2 --mode 1920x1080  --auto\
+        --output DP-1 --rotate right --left-of DP-2 --mode 1920x1080 --auto")
 
   ;; This will need to be updated to the name of a display!  You can find
   ;; the names of your displays by looking at arandr or the output of xrandr
   (setq exwm-randr-workspace-monitor-plist '(
-                                             0 "DVI-I-2-2"
-                                             1 "DVI-I-2-2"
-                                             2 "DVI-I-2-2"
-                                             3 "DVI-I-2-2"
-                                             4 "DVI-I-1-1"
-                                             5 "DVI-I-1-1"
-                                             6 "DVI-I-1-1"
-                                             7 "eDP-1"
-                                             8 "eDP-1"
-                                             9 "eDP-1"
+
+                                             0 "DP-1"
+                                             1 "DP-1"
+                                             2 "DP-1"
+                                             3 "DP-2"
+                                             4 "DP-2"
+                                             5 "DP-2"
+                                             6 "DP-2"
+                                             6 "DP-2"
+                                             7 "DP-2"
+                                             8 "DP-2"
+                                             9 "DP-2"
                                              ))
 
   ;; NOTE: Uncomment these lines after setting up autorandr!
@@ -252,11 +255,11 @@
   (desktop-environment-brightness-normal-decrement "5%-"))
 
 
-(require 'cl-lib)
-(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-  "Prevent annoying \"Active processes exist\" query when you quit Emacs."
-  (cl-letf (((symbol-function #'process-list) (lambda ())))
-    ad-do-it))
+;; (require 'cl-lib)
+;; (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+;;   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
+;;   (cl-letf (((symbol-function #'process-list) (lambda ())))
+;;     ad-do-it))
 
 
 (defun exwm-input-line-mode ()

@@ -226,7 +226,7 @@
 
 (add-hook 'focus-in-hook
   (lambda () (progn
-    (setq org-tags-column       90)) (org-align-all-tags)))
+    (setq org-tags-column 90)) (org-align-all-tags)))
 
 (add-hook 'focus-out-hook
   (lambda () (progn

@@ -17,7 +17,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 xsetroot -cursor_name left_ptr
 
 # Set keyboard repeat rate.
-xset r rate 200 60
+# xset r rate 200 60
 
 # Finally start Emacs
 exec emacs -mm --debug-init -l ~/.doom.d/exwm/desktop.el
