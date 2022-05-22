@@ -54,7 +54,7 @@
 
     (modify-all-frames-parameters
      '((right-divider-width . 0)
-       (alpha . (75 . 80))
+       (alpha . (85 . 90))
        (mouse-color . "white")
        (internal-border-width . 24)))
 

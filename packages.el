@@ -18,10 +18,19 @@
 (package! org-appear)
 (package! org-mobile-sync)
 (package! ob-typescript)
-;; unused
 (package! doct)
 
 (package! leuven-theme)
+
+(package! bespoke-modeline
+  :recipe (:type git :host github :repo "mclear-tools/bespoke-modeline"))
+(package! bespoke-themes
+  :recipe (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
+
+(package! nano-theme)
+(package! mood-line)
+(package! nano-modeline)
+
 (package! vertico-posframe)
 
 ;;; Additons Elfeed Packages

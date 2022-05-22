@@ -20,13 +20,6 @@
   (setq standard-indent 2)
   (setq-default indent-tabs-mode nil)
 
-  ;; Vertical window divider
-  (set-face-foreground 'window-divider "black")
-  (set-face-background 'header-line "black")
-  (setq window-divider-default-right-width 24)
-  (setq window-divider-default-places 'right-only)
-  (window-divider-mode 1)
-
   (require 'winum)
   (global-set-key (kbd "M-0") 'treemacs-select-window)
   (global-set-key (kbd "M-1") 'winum-select-window-1)
@@ -56,32 +49,56 @@
   (add-hook! markdown-mode #'bp/fill-visual-column))
 
 ;; Font Settings
-(setq doom-font
-      (font-spec
-       :family "VictorMono Nerd Font" :size 16)
-      doom-variable-pitch-font
-      (font-spec
-       :family  "VictorMono Nerd Font" :size 16)
-      doom-big-font
-      (font-spec
-       :family "VictorMono Nerd Font" :size 16))
+;; (setq doom-font
+;;       (font-spec
+;;        :family "VictorMono Nerd Font" :size 16)
+;;       doom-variable-pitch-font
+;;       (font-spec
+;;        :family  "VictorMono Nerd Font" :size 16)
+;;       doom-big-font
+;;       (font-spec
+;;        :family "VictorMono Nerd Font" :size 16))
 
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic))
 
 ;;;;; Set theme
-(after! doom-themes
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  ;; (load-theme 'modus-vivendi t)
-  )
+;; (after! doom-themes
+;;   (setq doom-themes-enable-bold t
+;;         doom-themes-enable-italic t)
+;;   ;; (load-theme 'modus-vivendi t)
+;;   )
 
 
-(setq
- modus-themes-bold-constructs t
- modus-themes-italic-constructs t)
-(load-theme 'modus-vivendi t)
+;; (setq
+;;  modus-themes-bold-constructs t
+;;  modus-themes-italic-constructs t)
+;; (load-theme 'modus-vivendi t)
+
+(use-package! nano-theme
+  :config
+  (nano-dark))
+
+;; (use-package! nano-modeline
+;;   :config
+;;   (nano-modeline-mode 1))
+;; ;; Vertical window divider
+
+;; TODO: move to theme specific module
+(set-face-attribute 'mode-line-inactive nil :box nil :background nano-dark-background)
+(set-face-attribute 'mode-line nil :box nil :background nano-dark-background)
+(set-face-foreground 'window-divider nano-dark-background)
+(setq window-divider-default-right-width 24)
+(setq window-divider-default-bottom-width 1)
+(setq window-divider-default-places 'right-only)
+(window-divider-mode t)
+;; Make sure new frames use window-divider
+(add-hook 'before-make-frame-hook 'window-divider-mode)
+
+(use-package! mood-line
+  :config
+  (mood-line-mode 1))
 
 (use-package ligature
   :config
@@ -110,18 +127,18 @@
    ))
 
 ;; Modeline Config
-(use-package! doom-modeline
-  :config
-  (setq doom-modeline-height 36
-        doom-modeline-bar-width 6
-        doom-modeline-lsp t
-        doom-modeline-github nil
-        doom-modeline-mu4e t
-        doom-modeline-irc t
-        doom-modeline-minor-modes nil
-        doom-modeline-persp-name t
-        doom-modeline-buffer-file-name-style 'truncate-except-project
-        doom-modeline-major-mode-icon t))
+;; (use-package! doom-modeline
+;;   :config
+;;   (setq doom-modeline-height 36
+;;         doom-modeline-bar-width 6
+;;         doom-modeline-lsp t
+;;         doom-modeline-github nil
+;;         doom-modeline-mu4e t
+;;         doom-modeline-irc t
+;;         doom-modeline-minor-modes nil
+;;         doom-modeline-persp-name t
+;;         doom-modeline-buffer-file-name-style 'truncate-except-project
+;;         doom-modeline-major-mode-icon t))
 
 (use-package! dashboard
   :init
