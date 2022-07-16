@@ -1,7 +1,4 @@
 ;; -*- lexical-binding: t; -*-
-;; Run tangle in the current file
-;;
-;;
 
 (setq bp/org-inbox-file "inbox.org")
 
@@ -19,7 +16,7 @@
   :hook (org-mode . org-appear-mode)
   :config
   (setq org-appear-trigger 'always
-        org-appear-delay 0.0
+        org-appear-delay 1.0
         org-appear-autolinks t)
 
   (org-appear-mode 1))
@@ -34,10 +31,10 @@
 
 
 ;;; Customize org-mode font setup
+;;; TODO: Move these to theme file
 (defun bp/org-font-setup ()
-  (interactive)
   (custom-set-faces
-   '(org-level-1 ((t (:inherit outline-1 :height 1.3 ))))
+   '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
    '(org-level-2 ((t (:inherit outline-2 :height 1.25 ))))
    '(org-level-3 ((t (:inherit outline-3 :height 1.2 ))))
    '(org-level-4 ((t (:inherit outline-4 :height 1.1 ))))
@@ -75,7 +72,8 @@
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
 ;;; Org Mode config
-(after! org
+(use-package! org
+  :config
   (require 'ob-typescript)
   (require 'org-protocol)
   (require 'org-protocol-capture-html)
@@ -206,8 +204,6 @@
         org-agenda-skip-deadline-if-done t
         org-agenda-include-deadlines t
         org-super-agenda-header-separator "\n"
-        ;; org-agenda-block-separator nil
-        ;; org-agenda-compact-blocks nil
         org-agenda-start-day nil
         org-agenda-span 10
         org-super-agenda-hide-empty-groups nil
@@ -218,12 +214,38 @@
   :init
   (setq! org-gcal-auto-archive nil)
   (setq org-gcal-client-id "1057193299633-eimgu3bm260jkisachubpf8oj1cah5nj.apps.googleusercontent.com"
-        org-gcal-client-secret "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"
+        org-gcal-client-secret (lambda (&rest _) (+pass-get-secret "Google/Calendar/Secret"))
         org-gcal-fetch-file-alist '(
                                     ("bparonto@gmail.com" .  "~/org/agenda.org")
                                     ("4tc3t9c2hef41n7dc461idql8k@group.calendar.google.com". "~/org/agenda.org"))))
 
+(use-package! org-modern
+  :config
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   ;; org-fold-catch-invisible-edits 'show-and-error
+   ;; org-special-ctrl-a/e t
+   ;; org-insert-heading-respect-content t
 
+   ;; ;; Org styling, hide markup etc.
+   ;; org-hide-emphasis-markers t
+   ;; org-pretty-entities t
+   org-ellipsis "…"
+
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+
+  (global-org-modern-mode)
+  )
 (add-hook 'focus-in-hook
   (lambda () (progn
     (setq org-tags-column 90)) (org-align-all-tags)))

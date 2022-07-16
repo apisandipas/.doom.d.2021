@@ -2,93 +2,24 @@
 ;;; UI Adjustments
 
 (defun bp/fill-visual-column ()
+  (interactive)
   (setq visual-fill-column-center-text t
-        visual-fill-column-width 120)
+        visual-fill-column-width 200)
   (visual-fill-column-mode 1))
 
-;; This remains untestes as of 22-04-01
-(defun split-horizontally-for-temp-buffers ()
-  "Split the window horizontally for temp buffers."
-  (when (one-window-p t)
-    (split-window-horizontally)))
 
-;; This assures all frame open with the same paremeters, not just the first one.
-(use-package! emacs
-  :config
-  (setf org-auto-align-tags nil)
-  (setq display-line-numbers-type 'relative)
-  (setq standard-indent 2)
-  (setq-default indent-tabs-mode nil)
-
-  (require 'winum)
-  (global-set-key (kbd "M-0") 'treemacs-select-window)
-  (global-set-key (kbd "M-1") 'winum-select-window-1)
-  (global-set-key (kbd "M-2") 'winum-select-window-2)
-  (global-set-key (kbd "M-3") 'winum-select-window-3)
-  (global-set-key (kbd "M-4") 'winum-select-window-4)
-  (global-set-key (kbd "M-5") 'winum-select-window-5)
-  (global-set-key (kbd "M-6") 'winum-select-window-6)
-  (global-set-key (kbd "M-7") 'winum-select-window-7)
-  (global-set-key (kbd "M-8") 'winum-select-window-8)
-  (winum-mode 1)
-
-  (require 'vertico-posframe)
-  (setq vertico-posframe-parameters '((left-fringe . 16)
-                                      (right-fringe . 16)))
-  (vertico-posframe-mode 1)
-
-  (require 'dimmer)
-  (dimmer-configure-which-key)
-  (dimmer-configure-posframe)
-  (dimmer-mode t)
+  (modify-all-frames-parameters
+   '((right-divider-width . 24)
+     (alpha . (85 . 95))
+     (mouse-color . "white")
+     (internal-border-width . 24)))
 
 
-  (add-hook 'temp-buffer-setup-hook 'split-vertically-for-temp-buffers)
+;; (setf org-auto-align-tags t)
+(setq display-line-numbers-type 'relative)
+(setq standard-indent 2)
+(setq-default indent-tabs-mode nil)
 
-  (add-hook! org-mode #'bp/fill-visual-column)
-  (add-hook! markdown-mode #'bp/fill-visual-column))
-
-;; Font Settings
-;; (setq doom-font
-;;       (font-spec
-;;        :family "VictorMono Nerd Font" :size 16)
-;;       doom-variable-pitch-font
-;;       (font-spec
-;;        :family  "VictorMono Nerd Font" :size 16)
-;;       doom-big-font
-;;       (font-spec
-;;        :family "VictorMono Nerd Font" :size 16))
-
-(custom-set-faces!
-  '(font-lock-comment-face :slant italic)
-  '(font-lock-keyword-face :slant italic))
-
-;;;;; Set theme
-;; (after! doom-themes
-;;   (setq doom-themes-enable-bold t
-;;         doom-themes-enable-italic t)
-;;   ;; (load-theme 'modus-vivendi t)
-;;   )
-
-
-;; (setq
-;;  modus-themes-bold-constructs t
-;;  modus-themes-italic-constructs t)
-;; (load-theme 'modus-vivendi t)
-
-(use-package! nano-theme
-  :config
-  (nano-dark))
-
-;; (use-package! nano-modeline
-;;   :config
-;;   (nano-modeline-mode 1))
-;; ;; Vertical window divider
-
-;; TODO: move to theme specific module
-(set-face-attribute 'mode-line-inactive nil :box nil :background nano-dark-background)
-(set-face-attribute 'mode-line nil :box nil :background nano-dark-background)
-(set-face-foreground 'window-divider nano-dark-background)
 (setq window-divider-default-right-width 24)
 (setq window-divider-default-bottom-width 1)
 (setq window-divider-default-places 'right-only)
@@ -96,9 +27,69 @@
 ;; Make sure new frames use window-divider
 (add-hook 'before-make-frame-hook 'window-divider-mode)
 
-(use-package! mood-line
+(defun bp/make-frame-pretty ()
+  "Set the initial look and feel of the frame"
+  (modify-all-frames-parameters
+   '((right-divider-width . 24)
+     (alpha . (85 . 95))
+     (mouse-color . "white")
+     (internal-border-width . 24))))
+
+(add-hook 'before-make-frame-hook 'bp/make-frame-pretty)
+
+(require 'winum)
+(global-set-key (kbd "M-0") 'treemacs-select-window)
+(global-set-key (kbd "M-1") 'winum-select-window-1)
+(global-set-key (kbd "M-2") 'winum-select-window-2)
+(global-set-key (kbd "M-3") 'winum-select-window-3)
+(global-set-key (kbd "M-4") 'winum-select-window-4)
+(global-set-key (kbd "M-5") 'winum-select-window-5)
+(global-set-key (kbd "M-6") 'winum-select-window-6)
+(global-set-key (kbd "M-7") 'winum-select-window-7)
+(global-set-key (kbd "M-8") 'winum-select-window-8)
+(winum-mode 1)
+
+(require 'vertico-posframe)
+(setq vertico-posframe-parameters '((left-fringe . 16)
+                                (right-fringe . 16)))
+(vertico-posframe-mode 1)
+
+(require 'dimmer)
+(dimmer-configure-which-key)
+(dimmer-configure-posframe)
+(dimmer-mode t)
+
+
+;; (add-hook 'temp-buffer-setup-hook 'split-vertically-for-temp-buffers)
+
+(add-hook! org-mode #'bp/fill-visual-column)
+(add-hook! markdown-mode #'bp/fill-visual-column)
+
+;; Font Settings
+(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 16)
+      doom-variable-pitch-font (font-spec :family  "Iosevka Nerd Font" :size 16)
+      doom-big-font (font-spec :family "Iosevka Nerd Font" :size 16))
+
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic))
+
+
+;; Set theme                               ;
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (load-theme 'modus-vivendi t)
+  )
+
+(use-package! nano-theme
   :config
-  (mood-line-mode 1))
+
+  (set-face-foreground 'window-divider nano-dark-background)
+  (set-face-foreground 'window-divider-first-pixel nano-dark-background)
+  (set-face-foreground 'window-divider-last-pixel nano-dark-background)
+   (nano-dark)
+  )
 
 (use-package ligature
   :config
@@ -127,18 +118,18 @@
    ))
 
 ;; Modeline Config
-;; (use-package! doom-modeline
-;;   :config
-;;   (setq doom-modeline-height 36
-;;         doom-modeline-bar-width 6
-;;         doom-modeline-lsp t
-;;         doom-modeline-github nil
-;;         doom-modeline-mu4e t
-;;         doom-modeline-irc t
-;;         doom-modeline-minor-modes nil
-;;         doom-modeline-persp-name t
-;;         doom-modeline-buffer-file-name-style 'truncate-except-project
-;;         doom-modeline-major-mode-icon t))
+(use-package! doom-modeline
+  :config
+  (setq doom-modeline-height 36
+        doom-modeline-bar-width 6
+        doom-modeline-lsp t
+        doom-modeline-github nil
+        doom-modeline-mu4e t
+        doom-modeline-irc t
+        doom-modeline-minor-modes nil
+        doom-modeline-persp-name t
+        doom-modeline-buffer-file-name-style 'truncate-except-project
+        doom-modeline-major-mode-icon t))
 
 (use-package! dashboard
   :init
@@ -152,14 +143,6 @@
   :config
   (dashboard-setup-startup-hook))
 
-
-
-;;  Not used currenrly as it
-;;; Causes issues w treemacs, disables by default
-;; (use-package! edwina
-;;   :config
-;;   (setq display-buffer-base-action '(display-buffer-below-selected))
-;;   (edwina-setup-dwm-keys))
 
 
 (provide 'bp-ui)

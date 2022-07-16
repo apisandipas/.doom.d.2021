@@ -1,12 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-;; (server-start)
-
-
-(setq garbage-collection-messages nil)
-
 (add-to-list 'load-path "~/.doom.d/modules/")
-
 
 (require 'bp-keybinds)
 (require 'bp-ui)
@@ -18,11 +12,8 @@
 (require 'bp-streaming)
 (require 'emacs-with-nyxt)
 
-;; Always open help in the main window frame
-;; (setq org-tags-column -77)
-;; (setq default-tab-width 2)
-;; (setq typescript-indent-level 2)
-
+;; Customizations relavent to the nanotheme
+(require 'bp-nano)
 
 (use-package! eshell
   :config
@@ -44,12 +35,8 @@
       :nick "apis_and_ipas"
       :sasl-username ,(+pass-get-user "Chats/Libera")
       :sasl-password (lambda (&rest _) (+pass-get-secret "Chats/Libera"))
-      :channels ("#emacs" "#chat" "#javascript" "#guix" "#react" "#chicago"))))
+      :channels ("#emacs" "#chat" "#javascript" "#guix" "#react" "#chicago" "#tropin"))))
 
-;; Make comments more readable.
-;; TODO: Change to a better color. This one is #bada55 :D
-;; (set-face-attribute 'font-lock-comment-face nil
-;;                     :foreground "#bada55")
 
 (use-package! youtube-dl)
 ;; (use-package! engine-mode)
@@ -59,3 +46,4 @@
 ;;   :keybinding "n"
 ;;   :browser 'browse-url-nyxt)
 (setq browse-url-browser-function 'browse-url-firefox)
+

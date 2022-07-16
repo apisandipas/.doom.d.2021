@@ -57,6 +57,7 @@
    org-roam-directory "~/org/brain"
    org-roam-dailies-directory "temporal/daily/"
    org-roam-completion-everywhere t
+   ;; TODO: Templates?
    org-roam-capture-ref-templates '(("r" "default" plain
                                      "#+title: ${title}\n#+filetags: #sources/??\n\nTopics::\nAuthor::\nRelated::\n\n* ${title}\n** Content\n\n #+begin_quote\n ${body}\n #+end_quote \n\n** Summary\n\n %?\n\n"
                                      :if-new (file "sources/%<%Y%m%d%H%M%S>-${slug}.org") :unnarrowed t))

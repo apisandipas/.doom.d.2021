@@ -80,6 +80,8 @@
   :recipe
   (:host github :repo "sachac/obs-websocket-el"))
 
+(package! org-modern)
+(package! mindre-theme)
 
-;;; Nyxt hacker browser goodnes
+;;; Nyxt hacker browser goodness
 (package! engine-mode)

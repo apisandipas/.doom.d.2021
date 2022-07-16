@@ -148,5 +148,4 @@
 (define-key mu4e-headers-mode-map (kbd "<S-right>") 'mu4e-headers-unfold-all)
 (mu4e-thread-folding-mode 1)
 
-
 (provide 'bp-email)

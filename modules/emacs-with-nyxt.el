@@ -1,8 +1,7 @@
 ;;; emacs-with-nyxt.el --- some code to run Nyxt via Emacs.
 
 ;; Copyright (C) 2021 Andrea Giugliano
-
-;; Author: Andrea Giugliano <andrea-dev@hotmail.com>
+;; Copyright (C) 2022 Bryan Paronto
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
