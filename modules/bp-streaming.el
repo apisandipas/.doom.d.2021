@@ -1,11 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 ;; Helpers for OBS and Twitch.tv
 
+(defun bp/setup-twitch-buffer ()
 
-(defun bp/prepare-for-stream ()
-  ;; (bp/open-stream-message-buffer) TODO
   )
-
 (defun bp/twitch-message (text)
   (interactive "MText: ")
   (with-current-buffer
@@ -28,7 +26,7 @@ _c_: Connect        _b_: BRB          _M_: Set Message
 "
     ("c" (obs-websocket-connect) "Connect")
     ("m" (obs-websocket-send "SetCurrentScene" :scene-name "Main") )
-    ("u" (obs-websocket-send "SetCurrentScene" :scene-name "CloseUp") )
+    ("u" (obs-websocket-send "SetCurrentScene" :scene-name "Close Up") )
     ("o" (obs-websocket-send "SetCurrentScene" :scene-name "Card_BeginningSoon") )
     ("t" (obs-websocket-send "SetCurrentScene" :scene-name "Card_TechnicalDifficulties"))
     ("b" (obs-websocket-send "SetCurrentScene" :scene-name "Card_BRB"))

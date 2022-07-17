@@ -1,7 +1,5 @@
 ;; -*- lexical-binding: t; -*-
 
-(setq bp/org-inbox-file "inbox.org")
-
 (map! :map org-mode-map
       :localleader
       :desc "Org babel tangle"
@@ -56,10 +54,10 @@
                   (":END:" . ?)
                   ("#+header:" . ?)
                   ("#+name:" . ?﮸)
-                  ("#+results:" . ?)
-                  ("#+call:" . ?)
-                  (":properties:" . ?)
-                  (":logbook:" . ?))))
+                  ("#+results:" . ? )
+                  ("#+call:" . ? )
+                  (":properties:" . ? )
+                  (":logbook:" . ? ))))
   (prettify-symbols-mode))
 
 (add-hook! org-mode #'bp/org-prettify-symbols)
@@ -72,19 +70,17 @@
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
 ;;; Org Mode config
-(use-package! org
-  :config
+(after! org
   (require 'ob-typescript)
   (require 'org-protocol)
   (require 'org-protocol-capture-html)
-  (setq
-   org-directory "~/org/"
-   org-agenda-files (list "inbox.org" "agenda.org")
-   org-ellipsis "▼"
-   org-default-notes-file (expand-file-name "notes.org" org-directory)
-   org-log-done 'time
-   org-tags-column -80
-   org-hide-emphasis-markers t)
+  (setq org-directory "~/org/"
+        org-agenda-files (list "inbox.org" "agenda.org" )
+        org-ellipsis " ▼"
+        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-log-done 'time
+        org-tags-column -80
+        org-hide-emphasis-markers t)
 
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -130,65 +126,41 @@
                         ))
 
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "APPT(a)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "CANCELLED(C)" "|" "DONE(d)")
+        '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "LOOP(l)" "|" "CANCELLED(C)" "|" "DONE(d)")
           (type "[ ](c)" "PROJ(p)" "SOMEDAY(s)" "LOOP(r)" "|" "[x](x)")))
-
-
-;;;  TODO This is clearly superiour syntax but will need to consider
-;;;  capture template strucrture changes
-  ;; (setq org-capture-templates
-  ;;       (doct '(("Todo" :keys "t"
-  ;;                :file bp/org-inbox-file
-  ;;                :prepend t
-  ;;                :template ( "* %{todo-state} %^{Description}"
-  ;;                            ":PROPERTIES:"
-  ;;                            ":Created: %U"
-  ;;                            ":END:"
-  ;;                            "%?")
-  ;;                :children (("First Child"  :keys "1"
-  ;;                          :headline   "One"
-  ;;                          :todo-state "TODO"
-  ;;                          :hook (lambda () (message "\"First Child\" selected.")))
-  ;;                         ("Second Child" :keys "2"
-  ;;                          :headline   "Two"
-  ;;                          :todo-state "NEXT")
-  ;;                         ("Third Child"  :keys "3"
-  ;;                          :headline   "Three"
-  ;;                          :todo-state "MAYBE"))
-  ;;                )))
-  ;;       )
 
 
   (setq org-capture-templates
         ;; Generic todo entry
-        `(("t" "Todo" entry  (file+headline "inbox.org" "Todos Inbox")
-           ,(concat "* TODO %?\n" "/Entered on/ %U"))
+        `(("t" "Todo" entry (file+headline "inbox.org" "Todos Inbox")
+           ,(concat "* [ ] %?\n"
+                    "/Entered on/ %U"))
 
           ;; User by Org protocol to capture a note to the inbox
-          ("p" "Protocol" entry (file+headline "inbox.org" "Notes Inbox")
+          ("p" "Protocol" entry (file+headline "inbox.org" "Links Inbox")
            "* %a\nCaptured On: %U\nWebsite: %l\n\n%i\n%?")
 
-          ;; Used by org protocol to capture a link to the inbox
-          ("L" "Protocol Link" entry (file+headline "inbox.org" "Links Inbox")
-           "* %? [[%:link][%:description]] \nCaptured On: %U")
-
-          ;; These come in from Nyxt. It can probably be merged with the Protocol Link one above.
-          ;; TODO: Consider merging these two use cases.
-          ("w" "Web link" entry (file+headline "inbox.org" "Links")
-           "* %?%a\n:SCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+1d\"))\n")
-
-          ;; Adds a new medical appointment to the Agenda
-          ("a" "Appointment" entry  (file+headline "agenda.org" "Future")
-           ,(concat "* APPT %? :appointment:\n"
-                    "<%<%Y-%m-%d %a %H:00>>"))
-
           ;; One-off fleeting notes go here.
-          ("n" "Note" entry  (file "notes.org")
+          ("n" "Note" entry  (file+headline "inbox.org" "Notes Inbox")
            ,(concat "* Note (%a)\n"
                     "/Entered on/ %U\n" "\n" "%?"))
 
+          ;; Used by org protocol to capture a link to the inbox
+          ("L" "Protocol Link" item (file+headline "inbox.org" "Links Inbox")
+           "%? [[%:link][%:description]] \nCaptured On: %U")
+
+          ;; These come in from Nyxt. It can probably be merged with the Protocol Link one above.
+          ;; TODO: Consider merging these two use cases.
+          ("w" "Web link" item (file+headline "inbox.org" "Links Inbox")
+           "* %?%a\n:SCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+1d\"))\n %?")
+
+          ;; Adds a new medical appointment to the Agenda
+          ("a" "Appointment" item  (file+headline "agenda.org" "Future")
+           ,(concat "* APPT %? :appointment:\n"
+                    "<%<%Y-%m-%d %a %H:00>>"))
+
           ;; Use as part of email workflow to schedule replies
-          ("@" "Inbox [mu4e]" entry (file "inbox.org")
+          ("@" "Inbox [mu4e]" entry (file+headline "inbox.org" "Emails To Process")
            ,(concat "* TODO Reply to \"%a\" %?\n"
                     "/Entered on/ %U")))))
 
@@ -219,40 +191,29 @@
                                     ("bparonto@gmail.com" .  "~/org/agenda.org")
                                     ("4tc3t9c2hef41n7dc461idql8k@group.calendar.google.com". "~/org/agenda.org"))))
 
-(use-package! org-modern
-  :config
-  (setq
-   ;; Edit settings
-   org-auto-align-tags nil
-   org-tags-column 0
-   ;; org-fold-catch-invisible-edits 'show-and-error
-   ;; org-special-ctrl-a/e t
-   ;; org-insert-heading-respect-content t
+  ;; (set
+  ;;  ;; Edit settings
+  ;;  org-auto-align-tags nil
+  ;;  org-tags-column 0
+  ;;  ;; org-fold-catch-invisible-edits 'show-and-error
+  ;;  ;; org-special-ctrl-a/e t
+  ;;  ;; org-insert-heading-respect-content t
 
-   ;; ;; Org styling, hide markup etc.
-   ;; org-hide-emphasis-markers t
-   ;; org-pretty-entities t
-   org-ellipsis "…"
+  ;;  ;; ;; Org styling, hide markup etc.
+  ;;  ;; org-hide-emphasis-markers t
+  ;;  ;; org-pretty-entities t
+  ;;  org-ellipsis "…"
 
-   ;; Agenda styling
-   org-agenda-tags-column 0
-   org-agenda-block-separator ?─
-   org-agenda-time-grid
-   '((daily today require-timed)
-     (800 1000 1200 1400 1600 1800 2000)
-     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-   org-agenda-current-time-string
-   "⭠ now ─────────────────────────────────────────────────")
+  ;;  ;; Agenda styling
+  ;;  org-agenda-tags-column 0
+  ;;  org-agenda-block-separator ?─
+  ;;  org-agenda-time-grid
+  ;;  '((daily today require-timed)
+  ;;    (800 1000 1200 1400 1600 1800 2000)
+  ;;    " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+  ;;  org-agenda-current-time-string
+  ;;  "⭠ now ─────────────────────────────────────────────────")
 
-  (global-org-modern-mode)
-  )
-(add-hook 'focus-in-hook
-  (lambda () (progn
-    (setq org-tags-column 90)) (org-align-all-tags)))
-
-(add-hook 'focus-out-hook
-  (lambda () (progn
-    (setq org-tags-column (- 0 (window-body-width)))) (org-align-all-tags)))
 
 
 

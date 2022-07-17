@@ -4,9 +4,9 @@
 ;; To install a package with Doom you must declare them here and run 'doom sync'
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
-(package! s)
-(package! one-themes)
-(package! winum)
+(package! s)                            ;; Is this used?
+
+;; Org Mode packages
 (unpin! org-roam)
 (package! org-roam-ui)
 (package! org-protocol-capture-html)
@@ -20,37 +20,31 @@
 (package! ob-typescript)
 (package! doct)
 
-(package! leuven-theme)
-
-(package! bespoke-modeline
-  :recipe (:type git :host github :repo "mclear-tools/bespoke-modeline"))
-(package! bespoke-themes
-  :recipe (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
-
-(package! nano-theme)
-(package! mood-line)
-(package! nano-modeline)
-
-(package! vertico-posframe)
-
-;;; Additons Elfeed Packages
-(package! elfeed-dashboard)
-(package! elfeed-goodies)
-
+;; UI Enhancing Packages
 (package! visual-fill-column)
 (package! dashboard)
-(package! youtube-dl
-  :recipe
-  (:host github
-   :repo "skeeto/youtube-dl-emacs"))
+(package! vertico-posframe)
+(package! dimmer)
+(package! winum)
 
+;; Language-specific packages
+(package! prettier-js)
+
+;; Themes
+(package! one-themes)
+(package! leuven-theme)
+(package! nano-theme)
 (package! ligature
   :recipe
   (:host github
    :repo "mickeynp/ligature.el"))
 
+;;; Elfeed Packages
+(package! elfeed-dashboard)
+(package! elfeed-goodies)
+
+;; EXWM Related Packages
 (package! exwm)
-(package! edwina)
 (package! desktop-environment)
 (package! exwm-outer-gaps
   :recipe
@@ -62,6 +56,7 @@
   (:host github
    :repo "elken/doom-modeline-exwm"))
 
+;; Mu4e enhancements
 (package! mu4e-thread-folding
   :recipe
   (:host github
@@ -71,17 +66,16 @@
   (:host github
    :repo "rougier/mu4e-dashboard"))
 
-(package! dimmer)
+;; Integration Related Packages
 (package! stumpwm-mode)
+(package! engine-mode)
+(package! youtube-dl
+  :recipe
+  (:host github
+   :repo "skeeto/youtube-dl-emacs"))
 
-;;; Streaming setup
+;;; Streaming Related
 (package! websocket)
 (package! obs-websocket
   :recipe
   (:host github :repo "sachac/obs-websocket-el"))
-
-(package! org-modern)
-(package! mindre-theme)
-
-;;; Nyxt hacker browser goodness
-(package! engine-mode)

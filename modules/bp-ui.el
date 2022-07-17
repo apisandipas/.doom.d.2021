@@ -7,12 +7,8 @@
         visual-fill-column-width 200)
   (visual-fill-column-mode 1))
 
-
-  (modify-all-frames-parameters
-   '((right-divider-width . 24)
-     (alpha . (85 . 95))
-     (mouse-color . "white")
-     (internal-border-width . 24)))
+(add-hook! org-mode 'bp/fill-visual-column)
+(add-hook! markdown-mode 'bp/fill-visual-column)
 
 
 ;; (setf org-auto-align-tags t)
@@ -62,9 +58,6 @@
 
 ;; (add-hook 'temp-buffer-setup-hook 'split-vertically-for-temp-buffers)
 
-(add-hook! org-mode #'bp/fill-visual-column)
-(add-hook! markdown-mode #'bp/fill-visual-column)
-
 ;; Font Settings
 (setq doom-font (font-spec :family "Iosevka Nerd Font" :size 16)
       doom-variable-pitch-font (font-spec :family  "Iosevka Nerd Font" :size 16)
@@ -79,17 +72,16 @@
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  (load-theme 'modus-vivendi t)
-  )
+  (load-theme 'one-dark t))
 
-(use-package! nano-theme
-  :config
+;; (use-package! nano-theme
+;;   :config
 
-  (set-face-foreground 'window-divider nano-dark-background)
-  (set-face-foreground 'window-divider-first-pixel nano-dark-background)
-  (set-face-foreground 'window-divider-last-pixel nano-dark-background)
-   (nano-dark)
-  )
+;;   (set-face-foreground 'window-divider nano-dark-background)
+;;   (set-face-foreground 'window-divider-first-pixel nano-dark-background)
+;;   (set-face-foreground 'window-divider-last-pixel nano-dark-background)
+;;    (nano-dark)
+;;   )
 
 (use-package ligature
   :config
@@ -144,5 +136,15 @@
   (dashboard-setup-startup-hook))
 
 
+;; Ensure help and other buffers open to the right in a tall split
+(set-popup-rules!
+  '(("^\\*\\([Hh]elp\\|Apropos\\)"
+     :slot 20 :side right :size 0.5 :select t :quit t)
+    ("^CAPTURE.*\\.org$"
+     :slot 20 :side right :size 0.5 :select t)
+    ("^\\*Org Src"
+     :slot 20 :side right :size 0.5 :select t)
+    ("^\\*info\\*$"
+     :slot 20 :side right :size 0.5 :select t :quit t)))
 
 (provide 'bp-ui)

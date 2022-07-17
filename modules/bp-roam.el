@@ -65,7 +65,7 @@
                                  :if-new (file "umami/%<%Y%m%d%H%M%S>-${slug}.org"))
 
                                 ("t" "topic-node" plain "#+title: ${title}\n#+filetags: #topic-node \n\nTopics:: %? \n\n"
-                                 :if-new (file "umami/%<%Y%m%d%H%M%S>-topic-${slug}.org"))
+                                 :if-new (file "topics/%<%Y%m%d%H%M%S>-topic-${slug}.org"))
 
                                 ("s" "source" plain
                                  "#+title: ${title}\n#+filetags: #source/%? \n\nTopics:: \nAuthor::  \nRelated::\n\n"

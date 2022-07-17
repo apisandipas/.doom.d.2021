@@ -12,9 +12,6 @@
 (require 'bp-streaming)
 (require 'emacs-with-nyxt)
 
-;; Customizations relavent to the nanotheme
-(require 'bp-nano)
-
 (use-package! eshell
   :config
   (setq eshell-rc-script "~/.doom.d/eshell/profile"
@@ -25,7 +22,15 @@
         eshell-scroll-to-bottom-on-input t
         eshell-destroy-buffer-when-process-dies t))
 
-(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "sbcl"
+        web-mode-markup-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-css-indent-offset 2
+        mac-command-modifier 'meta
+        js-indent-level 2
+        typescript-indent-level 2
+        json-reformat:indent-width 2
+        prettier-js-args '("--single-quote"))
 
 (use-package! circe
   :config
