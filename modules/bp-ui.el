@@ -4,14 +4,13 @@
 (defun bp/fill-visual-column ()
   (interactive)
   (setq visual-fill-column-center-text t
-        visual-fill-column-width 200)
+        visual-fill-column-width 180)
   (visual-fill-column-mode 1))
 
 (add-hook! org-mode 'bp/fill-visual-column)
 (add-hook! markdown-mode 'bp/fill-visual-column)
 
 
-;; (setf org-auto-align-tags t)
 (setq display-line-numbers-type 'relative)
 (setq standard-indent 2)
 (setq-default indent-tabs-mode nil)
@@ -27,11 +26,21 @@
   "Set the initial look and feel of the frame"
   (modify-all-frames-parameters
    '((right-divider-width . 24)
-     (alpha . (85 . 95))
+     (alpha . (95 . 75))
      (mouse-color . "white")
      (internal-border-width . 24))))
 
 (add-hook 'before-make-frame-hook 'bp/make-frame-pretty)
+
+(setq initial-frame-alist
+      '((right-divider-width . 24)
+        (alpha . (95 . 75))
+        (internal-border-width. 24)))
+
+(add-to-list 'default-frame-alist '(internal-border-width . 24))
+(add-to-list 'default-frame-alist '(alpha . (95 . 75)))
+(add-to-list 'default-frame-alist '(right-divider-width . 24))
+
 
 (require 'winum)
 (global-set-key (kbd "M-0") 'treemacs-select-window)
@@ -53,35 +62,29 @@
 (require 'dimmer)
 (dimmer-configure-which-key)
 (dimmer-configure-posframe)
-(dimmer-mode t)
-
-
-;; (add-hook 'temp-buffer-setup-hook 'split-vertically-for-temp-buffers)
+(dimmer-mode nil)
 
 ;; Font Settings
-(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 16)
-      doom-variable-pitch-font (font-spec :family  "Iosevka Nerd Font" :size 16)
-      doom-big-font (font-spec :family "Iosevka Nerd Font" :size 16))
+(setq doom-font (font-spec :family "Iosevka Term" :size 16)
+      doom-variable-pitch-font (font-spec :family  "Iosevka Term" :size 16)
+      doom-big-font (font-spec :family "Iosevka Term" :size 24))
 
+;; TODO: Get this refactored out
+(use-package! nano-theme)
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic))
+(set-face-foreground 'window-divider nano-dark-background)
+(set-face-foreground 'window-divider-first-pixel nano-dark-background)
+(set-face-foreground 'window-divider-last-pixel nano-dark-background)
 
 
 ;; Set theme                               ;
+(load-theme 'doom-nord t)
 (after! doom-themes
   (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (load-theme 'one-dark t))
+        doom-themes-enable-italic t))
 
-;; (use-package! nano-theme
-;;   :config
-
-;;   (set-face-foreground 'window-divider nano-dark-background)
-;;   (set-face-foreground 'window-divider-first-pixel nano-dark-background)
-;;   (set-face-foreground 'window-divider-last-pixel nano-dark-background)
-;;    (nano-dark)
-;;   )
 
 (use-package ligature
   :config
@@ -106,12 +109,10 @@
   (pushnew!
    which-key-replacement-alist
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
-   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
-   ))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))))
 
 ;; Modeline Config
-(use-package! doom-modeline
-  :config
+(after! doom-modeline
   (setq doom-modeline-height 36
         doom-modeline-bar-width 6
         doom-modeline-lsp t

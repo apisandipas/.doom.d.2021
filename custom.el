@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("3d47380bf5aa650e7b8e049e7ae54cdada54d0637e7bac39e4cc6afb44e8463b" "67f0f440afa2e68d9d00219b5a56308761af45832fb60769d2b2fd36e3fead45" "76ed126dd3c3b653601ec8447f28d8e71a59be07d010cd96c55794c3008df4d7" default))
+   '("1704976a1797342a1b4ea7a75bdbb3be1569f4619134341bd5a4c1cfb16abad4" "3d47380bf5aa650e7b8e049e7ae54cdada54d0637e7bac39e4cc6afb44e8463b" "67f0f440afa2e68d9d00219b5a56308761af45832fb60769d2b2fd36e3fead45" "76ed126dd3c3b653601ec8447f28d8e71a59be07d010cd96c55794c3008df4d7" default))
  '(ignored-local-variable-values
    '((eval modify-syntax-entry 43 "'")
      (eval modify-syntax-entry 36 "'")
@@ -27,7 +27,7 @@
      (eval setq-local guix-directory
            (locate-dominating-file default-directory ".dir-locals.el"))))
  '(package-selected-packages
-   '(mindre-theme prettier mood-line olivetti leuven-theme which-key vertico-posframe use-package typescript-mode stumpwm-mode slime prettier-js org-appear nano-theme nano-modeline nano-agenda hide-mode-line guix graphql evil-visualstar evil-goggles eslintd-fix eslint-fix dimmer counsel consult command-log-mode bluetooth))
+   '(dired-icon mindre-theme prettier mood-line olivetti leuven-theme which-key vertico-posframe use-package typescript-mode stumpwm-mode slime prettier-js org-appear nano-theme nano-modeline nano-agenda hide-mode-line guix graphql evil-visualstar evil-goggles eslintd-fix eslint-fix dimmer counsel consult command-log-mode bluetooth))
  '(warning-suppress-log-types
    '((hack-local-variables-hook)
      (eshell-output-filter-functions)))

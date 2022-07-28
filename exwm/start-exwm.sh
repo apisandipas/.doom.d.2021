@@ -1,6 +1,6 @@
 #!/bin/sh
 # Set the screen DPI (uncomment this if needed!)
-# xrdb ~/.emacs.d/exwm/Xresources
+xrdb ~/.emacs.d/exwm/nord.Xresources
 
 xautolock -time 120 -locker 'betterlockscreen -l dim' &
 
@@ -18,6 +18,8 @@ xsetroot -cursor_name left_ptr
 
 # Set keyboard repeat rate.
 # xset r rate 200 60
+
+# killall companion && companion &
 
 # Finally start Emacs
 exec emacs -mm --debug-init -l ~/.doom.d/exwm/desktop.el

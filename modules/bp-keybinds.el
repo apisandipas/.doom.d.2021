@@ -1,5 +1,29 @@
 ;; -*- lexical-binding: t; -*-
 ;;
+;;
+(defun bp/kill-non-project-buffers (&optional kill-special)
+  "Kill buffers that do not belong to a `projectile' project or is an EXWM window
+
+With prefix argument (`C-u'), also kill the special buffers."
+  (interactive "P")
+  (let ((bufs (buffer-list (selected-frame))))
+    (dolist (buf bufs)
+      (with-current-buffer buf
+        (let ((buf-name (buffer-name buf)))
+          (when (or (null (projectile-project-p))
+                    (and kill-special
+                         (string-match "^\*" buf-name)))
+            ;; Preserve buffers with names starting with *scratch or *Messages
+            (unless (or (string-match "^\\*\\(\\scratch\\|Messages\\)" buf-name)
+                        ;; Preserve EXWM buffers
+                        (eq (buffer-local-value 'major-mode buf) 'exwm-mode))
+              (message "Killing buffer %s" buf-name)
+              (kill-buffer buf))))))))
+
+(map! :leader
+      :prefix ("t". "toggle")
+      :desc "Kill non-Project buffers"
+      "B" #'bp/kill-non-project-buffers)
 
 (map! :leader
       :prefix ("t" . "toggle")

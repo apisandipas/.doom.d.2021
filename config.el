@@ -23,17 +23,21 @@
         eshell-destroy-buffer-when-process-dies t))
 
 (setq inferior-lisp-program "sbcl"
-        web-mode-markup-indent-offset 2
-        web-mode-code-indent-offset 2
-        web-mode-css-indent-offset 2
-        mac-command-modifier 'meta
-        js-indent-level 2
-        typescript-indent-level 2
-        json-reformat:indent-width 2
-        prettier-js-args '("--single-quote"))
+      web-mode-markup-indent-offset 2
+      web-mode-code-indent-offset 2
+      web-mode-css-indent-offset 2
+      mac-command-modifier 'meta
+      js-indent-level 2
+      typescript-indent-level 2
+      json-reformat:indent-width 2
+      prettier-js-args '("--double-quote"))
 
-(use-package! circe
-  :config
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'typescript-mode-hook 'prettier-js-mode)
+(add-hook 'typescript-tsx-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
+
+(after! circe
   (set-irc-server! "irc.libera.chat"
     '(:tls t
       :port 6697

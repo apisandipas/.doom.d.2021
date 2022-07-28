@@ -52,7 +52,8 @@ Requires polybar, instead of relying on xrandr,
   (interactive)
   (let ((process-list bp/polybar-processes))
     (dolist (p process-list)
-          (kill-process p)))
+      (if (process-live-p p)
+          (kill-process p))))
   (setq bp/polybar-processes nil))
 
 (defvar bp/polybar-config-location "~/.doom.d/exwm/polybar.config.ini"
@@ -78,12 +79,12 @@ Requires polybar, instead of relying on xrandr,
 (defun bp/polybar-exwm-workspace ()
   (interactive)
   (pcase exwm-workspace-current-index
-    (0 "  Video")
+    (0 "ﳜ Video")
     (1 "  Term")
-    (2 "  Chat")
+    (2 "  Chat")
     (3 "  Dev")
     (4 "  Mail")
-    (5 "爵  Web")
+    (5 "  Web")
     (6 "  VCS")
     (7 "  Music")
     (8 "  Files")
@@ -96,7 +97,6 @@ Requires polybar, instead of relying on xrandr,
   (bp/send-polybar-hook "exwm-ws-indicator" 1))
 
 (defun bp/polybar-exwm-ws-indicator ()
-  (interactive)
   (pcase exwm-workspace-current-index
      (0 "                   ")
      (1 "                   ")
@@ -189,7 +189,7 @@ Requires polybar, instead of relying on xrandr,
         --output HDMI-1 --rotate left --right-of DP-2 --mode 1920x1080 --auto")
 
   ;; This will need to be updated to the name of a display!  You can find
-  ;; the names of your displays by looking at arandr or the output of xrandr
+  ;; the names of your displays by looking at ar andr or the output of xrandr
   (setq exwm-randr-workspace-monitor-plist '(
         0 "DP-1"
         1 "DP-1"
@@ -340,29 +340,46 @@ Requires polybar, instead of relying on xrandr,
                       (exwm-input-toggle-mode)
                       (org-capture)))
 
+(defun bp/exwm-jump-to-buffer ()
+  "Switch to workspace of chosen EXWM buffer."
+  (interactive)
+  (let ((buf (completing-read "Switch to X buffer: "
+                          (mapcar #'buffer-name
+                                  (seq-filter
+                                   (lambda (b) (eq (buffer-local-value 'major-mode b) 'exwm-mode))
+                                   (buffer-list))))))
+(exwm-workspace-switch-to-buffer buf)))
+
+(exwm-input-set-key (kbd "s-f")
+                    (lambda ()
+                      (interactive)
+                      (bp/exwm-jump-to-buffer)))
+
 (defun bp/take-screenshot ()
   "Takes a fullscreen screenshot of the current workspace"
   (interactive)
+  (require 'cl-lib)
+  (require 'seq)
   (when window-system
-  (loop for i downfrom 3 to 1 do
-        (progn
-          (message (concat (number-to-string i) "..."))
-          (sit-for 1)))
-  (message "Cheese!")
-  (sit-for 1)
-  (start-process "screenshot" nil "import" "-window" "root"
-             (concat (getenv "HOME") "/Pictures" (subseq (number-to-string (float-time)) 0 10) ".png"))
-  (message "Screenshot taken!")))
-(global-set-key (kbd "<print>") 'bp/take-screenshot)
+        (cl-loop for i downfrom 3 to 1 do
+                (progn
+                (message (concat (number-to-string i) "..."))
+                (sit-for 1)))
+        (message "Cheese!")
+        (sit-for 1)
+        (start-process "screenshot" nil "import" "-window" "root"
+                (concat (getenv "HOME") "/Pictures/" (seq-subseq (number-to-string (float-time)) 0 10) ".png"))
+        (message "Screenshot taken!")))
+(global-set-key (kbd "<Print>") 'bp/take-screenshot)
 
 (defun bp/take-screenshot-region ()
   "Takes a screenshot of a region selected by the user."
   (interactive)
   (when window-system
-  (call-process "import" nil nil nil ".newScreen.png")
-  (call-process "convert" nil nil nil ".newScreen.png" "-shave" "1x1"
-                (concat (getenv "HOME") "/Pictures" (seq-subseq (number-to-string (float-time)) 0 10) ".png"))
-  (call-process "rm" nil nil nil ".newScreen.png")))
+        (call-process "import" nil nil nil ".newScreen.png")
+        (call-process "convert" nil nil nil ".newScreen.png" "-shave" "1x1"
+                        (concat (getenv "HOME") "/Pictures/" (seq-subseq (number-to-string (float-time)) 0 10) ".png"))
+        (call-process "rm" nil nil nil ".newScreen.png")))
 (global-set-key (kbd "<Scroll_Lock>") 'bp/take-screenshot-region)
 
 (defun bp/open-spotify ()
