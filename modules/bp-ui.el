@@ -22,6 +22,8 @@
 ;; Make sure new frames use window-divider
 (add-hook 'before-make-frame-hook 'window-divider-mode)
 
+
+
 (defun bp/make-frame-pretty ()
   "Set the initial look and feel of the frame"
   (modify-all-frames-parameters
@@ -147,5 +149,7 @@
      :slot 20 :side right :size 0.5 :select t)
     ("^\\*info\\*$"
      :slot 20 :side right :size 0.5 :select t :quit t)))
+
+​(setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-pretty)
 
 (provide 'bp-ui)

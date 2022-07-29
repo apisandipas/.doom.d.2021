@@ -21,9 +21,9 @@ With prefix argument (`C-u'), also kill the special buffers."
               (kill-buffer buf))))))))
 
 (map! :leader
-      :prefix ("t". "toggle")
+      :prefix ("b". "buffers")
       :desc "Kill non-Project buffers"
-      "B" #'bp/kill-non-project-buffers)
+      "D" #'bp/kill-non-project-buffers)
 
 (map! :leader
       :prefix ("t" . "toggle")
