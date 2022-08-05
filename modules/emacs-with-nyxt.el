@@ -125,6 +125,7 @@ Defaults to Sly because it has better integration with Nyxt."
   "Make filename from note TITLE and NOW time (assumed in the current time ZONE)."
   (concat
    org-roam-directory
+   "/umami/"
    (format-time-string "%Y%m%d%H%M%S_" now (or zone (current-time-zone)))
    (s-truncate 70 (on/slug-string title) "")
    ".org"))

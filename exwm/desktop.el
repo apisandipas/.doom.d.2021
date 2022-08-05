@@ -184,9 +184,9 @@ Requires polybar, instead of relying on xrandr,
   ;; Set the screen resolution (update this to be the correct resolution for your screen!)
   (require 'exwm-randr)
   (exwm-randr-enable)
-  (start-process-shell-command "xrandr" nil "xrandr --output DP-2 --mode 1920x1080 --auto\
-        --output DP-1 --rotate right --left-of DP-2 --mode 1920x1080 --auto\
-        --output HDMI-1 --rotate left --right-of DP-2 --mode 1920x1080 --auto")
+  (start-process-shell-command "xrandr" nil "xrandr --output DP-3 --mode 1920x1080 --auto\
+        --output DP-1 --rotate right --left-of DP-3 --mode 1920x1080 --auto\
+3        --output DP-2 --rotate left --right-of DP-3 --mode 1920x1080 --auto")
 
   ;; This will need to be updated to the name of a display!  You can find
   ;; the names of your displays by looking at ar andr or the output of xrandr
@@ -194,13 +194,13 @@ Requires polybar, instead of relying on xrandr,
         0 "DP-1"
         1 "DP-1"
         2 "DP-1"
-        3 "DP-2"
-        4 "DP-2"
-        5 "DP-2"
-        6 "DP-2"
-        7 "HDMI-1"
-        8 "HDMI-1"
-        9 "HDMI-1"))
+        3 "DP-3"
+        4 "DP-3"
+        5 "DP-3"
+        6 "DP-3"
+        7 "DP-2"
+        8 "DP-2"
+        9 "DP-2"))
 
   ;; NOTE: Uncomment these lines after setting up autorandr!
   ;; React to display connectivity changes, do initial display update

@@ -1,0 +1,42 @@
+#+title: A Tour of My Integrated Computing Environment
+
+* Integrated Development Environment
+- Anything you might expect from a modern IDE:
+  - Syntax Highlighting.
+  - Language Server Protocol integration.
+  - Debugging
+    
+* Project & Day Planning
+- Org Mode makes this a cinch.
+- Getting Things Done.
+- Task Scheduling & Time Keeping.
+- Calendar Syncing.
+    
+* Note Taking
+- Basic Note Taking in Org Mode.
+- Linked Note Taking and Introspection with Org Roam & Org-Roam UI.
+  
+* Email
+- mu4e integration via SMTP
+
+* IRC
+- Old-school Internet Chat. Pre ICQ. Pre AIM. Pre Whatsapp. Pre Discord.
+  
+* RSS
+- Read your favorite blogs, news sites or Subreddits.
+
+* Presentations
+- Like the one you're seeing right now.
+
+* OBS / Streaming
+- Connect to OBS
+- Connect to Twitch
+- Change Scenes
+
+* EXWM - Window Management
+** Split Windows
+** Move Windows
+** Move Focus
+** Switch Workspaces
+** Move Windows Around Workspaces.
+    

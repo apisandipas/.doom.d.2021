@@ -56,3 +56,14 @@
 ;;   :browser 'browse-url-nyxt)
 (setq browse-url-browser-function 'browse-url-firefox)
 
+
+;; Ensure help and other buffers open to the right in a tall split
+(set-popup-rules!
+  '(("^\\*\\([Hh]elp\\|Apropos\\)"
+     :slot 20 :side right :size 0.5 :select t :quit t)
+    ("^CAPTURE.*\\.org$"
+     :slot 20 :side right :size 0.5 :select t)
+    ("^\\*Org Src"
+     :slot 20 :side right :size 0.5 :select t)
+    ("^\\*info\\*$"
+     :slot 20 :side right :size 0.5 :select t :quit t)))

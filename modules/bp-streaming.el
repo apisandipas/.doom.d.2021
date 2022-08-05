@@ -1,17 +1,17 @@
 ;; -*- lexical-binding: t; -*-
 ;; Helpers for OBS and Twitch.tv
 
-(defun bp/setup-twitch-buffer ()
+;; (defun bp/setup-twitch-buffer ()
 
-  )
-(defun bp/twitch-message (text)
-  (interactive "MText: ")
-  (with-current-buffer
-      (get-buffer-create "Twitch message")
-    (erase-buffer)
-    (insert "Currently: ")
-    (insert text)
-    (goto-char (point-min))))
+;;   )
+;; (defun bp/twitch-message (text)
+;;   (interactive "MText: ")
+;;   (with-current-buffer
+;;       (get-buffer-create "Twitch message")
+;;     (erase-buffer)
+;;     (insert "Currently: ")
+;;     (insert text)
+;;     (goto-char (point-min))))
 
 (use-package obs-websocket
   :config

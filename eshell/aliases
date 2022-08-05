@@ -5,7 +5,7 @@ alias mux  tmuxinator
 #alias memacs  emacs --with-profile custom &
 # alias emacs  emacsclient -c -a emacs
 alias cat  bat
-alias tm 'tmux attach || tmux new'
+alias tm 'tmux attach -t 0 || tmux new'
 
 # Lazy movements
 alias ..  cd ../

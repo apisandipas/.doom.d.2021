@@ -26,6 +26,10 @@
 (package! vertico-posframe)
 (package! dimmer)
 (package! winum)
+(package! ligature
+  :recipe
+  (:host github
+   :repo "mickeynp/ligature.el"))
 
 ;; Language-specific packages
 (package! prettier-js)
@@ -33,11 +37,7 @@
 ;; Themes
 (package! one-themes)
 (package! leuven-theme)
-(package! nano-theme)
-(package! ligature
-  :recipe
-  (:host github
-   :repo "mickeynp/ligature.el"))
+
 
 ;;; Elfeed Packages
 (package! elfeed-dashboard)
@@ -74,6 +74,7 @@
   (:host github
    :repo "skeeto/youtube-dl-emacs"))
 
+(package! popper)
 
 
 ;;; Streaming Related

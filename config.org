@@ -10,7 +10,7 @@
 
 * About
 This is my literate emacs config. There are many like it, but this one is mine.
-I started out with a Literate Config months back when I first started using emacs. It was in fact one of the main things I first saw and realized how cool Emacs could be. But boy, it's a terrible way to start. I cannot cound the number of time I'd broken my config by trying something new out, restarting, only to reazize I'd severely broken something, left out a paren or otherwise and would have to edit the configs manually. What a nightmare.
+I started out with a Literate Config months back when I first started using Emacs. It was in fact one of the main things I first saw and realized how cool Emacs could be. But boy, it's a terrible way to start. I cannot count the number of time I'd broken my config by trying something new out, restarting, only to reazize I'd severely broken something, left out a parentheses or otherwise and would have to edit the configs manually. What a nightmare.
 
 Months later, I'm much more capable within emacs and I feel like, yeah, _I'm ready to get hurt again_.
 
@@ -47,7 +47,7 @@ I'm currently stuck on VictorMono. I find it readable and stylish and it comes w
 
 #+end_src
 
-*** Sexy Ligratures
+*** Sexy Ligatures
 #+begin_src emacs-lisp :tangle yes
 (use-package ligature
   :config
