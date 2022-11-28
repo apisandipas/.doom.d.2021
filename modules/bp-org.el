@@ -19,7 +19,7 @@
 (use-package! org-mobile-sync
   :defer t
   :config
-  (setq org-mobile-inbox-for-pull "~/org/from-mobile.org")
+  (setq org-mobile-inbox-for-pull "~/Dropbox/org/from-mobile.org")
   (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/")
   (org-mobile-sync-mode 1))
 
@@ -67,9 +67,9 @@
 (require 'ob-typescript)
 (require 'org-protocol)
 (require 'org-protocol-capture-html)
-(setq org-directory "~/org/"
+(setq org-directory "~/Dropbox/org/"
       org-agenda-files (list "inbox.org" "agenda.org" )
-      org-archive-location "~/org/archive.org::* %s Archive"
+      org-archive-location "~/Dropbox/org/archive.org::* %s Archive"
       org-ellipsis " ▼"
       org-default-notes-file (expand-file-name "notes.org" org-directory)
       org-log-done 'time

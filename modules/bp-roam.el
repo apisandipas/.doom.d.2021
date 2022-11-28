@@ -3,17 +3,17 @@
 
 (defvar bp/daily-note-template
   (concat "\n\n\n\n* 🤹 Tasks\n %?"
-          "\n\n\n* 🪓 Log"
+          "\n\n\n* 🌲 Log "
           "\n\n\n\n* 🏁 Stand Ups"
           "\n\n\n\n* 📓 Journal"
-          "\n\n\n\n* 🥡 Take-Aways" )
+          "\n\n\n\n* 🍲 Take-Aways" )
   "Template for my daily note taking practices."
   )
 
 (defun bp/org-roam-goto-today ()
   "Go to the current days temporal note"
   (interactive)
-  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%m-%d")) '(4))
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%m-%d %a")) '(4))
                      :node (org-roam-node-create)
                      :templates `(("d" "daily" plain ,bp/daily-note-template
                                    :if-new (file+head "temporal/daily/%<%Y-%m-%d>.org"
@@ -79,7 +79,7 @@
 
 (defun bp/org-roam/get-monthly-note-link ()
   "Get the link for the current months temporal note, otherwise create it and return its link"
-  (let* ((formatted-date (format-time-string "%Y-%B"))
+  (let* ((formatted-date (format-time-string "%Y %B"))
          (node (org-roam-node-from-title-or-alias (format-time-string formatted-date))))
     (if node
         (org-link-make-string
@@ -93,22 +93,21 @@
                                          :if-new (file+head "temporal/monthly/%<%Y-%B>.org"
                                                             ,(bp/org-roam/monthly-note-header))
                                          :immediate-finish t
-                                         :unnarrowed t)))
-        (bp/org-roam/get-monthly-note-link)))))
+                                         :unnarrowed t)))))))
 
 (defun bp/org-roam/daily-note-header ()
   "Geneate the monthly note link for daily note header"
   (concat "#+title: %<%Y-%m-%d %a>\n\n"
           "Parent :: "
-          (bp/org-roam/get-monthly-note-link)
+          ;; (bp/org-roam/get-monthly-note-link)
           "\n\n"))
 
 (defun bp/org-roam/monthly-note-header ()
   "Geneate the monthly note header"
-  (concat "#+title: %<%Y-%B>\n"
+  (concat "#+title: %<%Y %B>\n"
           "#+filetags: #temporal/monthly\n\n"
           "Parent :: "
-          (bp/org-roam/get-yearly-note-link)
+          ;; (bp/org-roam/get-yearly-note-link)
           "\n\n"))
 
 (map! :leader
@@ -129,7 +128,7 @@
    org-gcal-recurring-events-mode 'nested
    org-roam-v2-ack t
    bp/daily-note-filename "%<%Y-%m-%d>.org"
-   org-roam-directory "~/org/brain"
+   org-roam-directory "~/Dropbox/org/brain"
    org-roam-dailies-directory "temporal/daily/"
    org-roam-completion-everywhere t
    ;; TODO: Templates?

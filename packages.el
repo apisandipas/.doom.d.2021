@@ -82,3 +82,11 @@
 (package! obs-websocket
   :recipe
   (:host github :repo "sachac/obs-websocket-el"))
+
+(package! prisma-mode
+  :recipe
+  (:host github
+   :repo "pimeys/emacs-prisma-mode"
+   :branch "main"))
+
+(package! mastodon)

@@ -7,6 +7,7 @@
 (require 'bp-org)
 (require 'bp-roam)
 (require 'bp-rss)
+(require 'bp-mastodon)
 (require 'bp-email)
 (require 'bp-presentations)
 (require 'bp-streaming)
@@ -67,3 +68,5 @@
      :slot 20 :side right :size 0.5 :select t)
     ("^\\*info\\*$"
      :slot 20 :side right :size 0.5 :select t :quit t)))
+
+

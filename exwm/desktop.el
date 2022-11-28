@@ -127,11 +127,11 @@ Requires polybar, instead of relying on xrandr,
 
   ;; Launch apps that will run in the background
   (bp/run-in-background "dropbox")
-  (bp/run-in-background "nm-applet")
+  ;; (bp/run-in-background "nm-applet")
   (bp/run-in-background "pasystray")
-  (bp/run-in-background "blueman-applet")
+  ;; (bp/run-in-background "blueman-applet")
   ;; (bp/run-in-background "blueman-tray")
-  (bp/run-in-background "~/Apps/KeylightControl.AppImage")
+  ;; (bp/run-in-background "~/Apps/KeylightControl.AppImage")
   (bp/run-in-background "dunst")
   (bp/run-in-background "firefox")
 
@@ -184,23 +184,23 @@ Requires polybar, instead of relying on xrandr,
   ;; Set the screen resolution (update this to be the correct resolution for your screen!)
   (require 'exwm-randr)
   (exwm-randr-enable)
-  (start-process-shell-command "xrandr" nil "xrandr --output DP-3 --mode 1920x1080 --auto\
-        --output DP-1 --rotate right --left-of DP-3 --mode 1920x1080 --auto\
-3        --output DP-2 --rotate left --right-of DP-3 --mode 1920x1080 --auto")
+  (start-process-shell-command "xrandr" nil "xrandr --output DisplayPort-2 --mode 1920x1080 --auto\
+        --output DisplayPort-1 --rotate left --left-of DisplayPort-2 --mode 1920x1080 --auto\
+        --output DisplayPort-0 --right-of DisplayPort-2 --mode 1920x1080 --auto")
 
   ;; This will need to be updated to the name of a display!  You can find
   ;; the names of your displays by looking at ar andr or the output of xrandr
   (setq exwm-randr-workspace-monitor-plist '(
-        0 "DP-1"
-        1 "DP-1"
-        2 "DP-1"
-        3 "DP-3"
-        4 "DP-3"
-        5 "DP-3"
-        6 "DP-3"
-        7 "DP-2"
-        8 "DP-2"
-        9 "DP-2"))
+        0 "DisplayPort-1"
+        1 "DisplayPort-1"
+        2 "DisplayPort-1"
+        3 "DisplayPort-2"
+        4 "DisplayPort-2"
+        5 "DisplayPort-2"
+        6 "DisplayPort-2"
+        7 "DisplayPort-0"
+        8 "DisplayPort-0"
+        9 "DisplayPort-0"))
 
   ;; NOTE: Uncomment these lines after setting up autorandr!
   ;; React to display connectivity changes, do initial display update
@@ -385,3 +385,4 @@ Requires polybar, instead of relying on xrandr,
 (defun bp/open-spotify ()
   (interactive)
   (run-or-raise-or-dismiss "spotify" "Spotify"))
+

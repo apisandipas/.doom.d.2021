@@ -2,6 +2,7 @@
 Name=EXWM
 Comment=Emacs Window Manager
 Exec=sh /home/bryan/.doom.d/exwm/start-exwm.sh
+Icon=emacs
 TryExec=sh
 Type=Application
 X-LightDM-DesktopName=exwm
