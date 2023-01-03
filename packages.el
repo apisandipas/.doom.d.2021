@@ -37,6 +37,7 @@
 ;; Themes
 (package! one-themes)
 (package! leuven-theme)
+(package! modus-themes)
 
 
 ;;; Elfeed Packages

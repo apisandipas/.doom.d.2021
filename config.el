@@ -69,4 +69,33 @@
     ("^\\*info\\*$"
      :slot 20 :side right :size 0.5 :select t :quit t)))
 
+(after! citar
+        (setq! citar-bibliography '("~/Dropbox/org/references.bib"))
+        (setq! citar-library-paths '("~/Dropbox/library")
+                citar-notes-paths '("~/Dropbox/org/brain")))
 
+  (defun bp/deft-parse-title (file contents)
+    "Parse the given FILE and CONTENTS and determine the title.
+   If `deft-use-filename-as-title' is nil, the title is taken to
+   be the first non-empty line of the FILE.  Else the base name of the FILE is
+   used as title."
+      (let ((begin (string-match "^#\\+[tT][iI][tT][lL][eE]: .*$" contents)))
+        (if begin
+            (string-trim (substring contents begin (match-end 0)) "#\\+[tT][iI][tT][lL][eE]: *" "[\n\t ]+")
+          (deft-base-filename file))))
+
+(after!  deft
+  (setq deft-directory "~/Dropbox/org/brain")
+  (setq deft-extensions '("org" "md" "txt"))
+  (setq deft-default-extension "org")
+  (setq deft-recursive t)
+  (advice-add 'deft-parse-title :override #'bp/deft-parse-title)
+
+  (setq deft-strip-summary-regexp
+        (concat "\\("
+                "[\n\t]" ;; blank
+                 "\\|^#\\+[[:alpha:]_]+:.*$" ;; org-mode metadata
+                 "\\|^:PROPERTIES:\n\\(.+\n\\)+:END:\n"
+                 "\\)"))
+  (setq deft-use-filename-as-title nil)
+  (setq deft-use-filter-string-for-filename t))

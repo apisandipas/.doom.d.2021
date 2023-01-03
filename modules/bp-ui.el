@@ -4,7 +4,7 @@
 (defun bp/fill-visual-column ()
   (interactive)
   (setq visual-fill-column-center-text t
-        visual-fill-column-width 180)
+        visual-fill-column-width 120)
   (visual-fill-column-mode 1))
 
 (add-hook! org-mode 'bp/fill-visual-column)
@@ -23,13 +23,13 @@
 (add-hook 'before-make-frame-hook 'window-divider-mode)
 
 
-(set-face-foreground 'window-divider "#212337")
+(set-face-foreground 'window-divider "#cccccc")
 
 (defun bp/make-frame-pretty ()
   "Set the initial look and feel of the frame"
   (modify-all-frames-parameters
    '((right-divider-width . 24)
-     (alpha . (85 . 75))
+     (alpha-background . 100)
      (mouse-color . "white")
      (internal-border-width . 24))))
 
@@ -37,11 +37,11 @@
 
 (setq initial-frame-alist
       '((right-divider-width . 24)
-        (alpha . (85 . 75))
+        (alpha-background . 100)
         (internal-border-width. 24)))
 
 (add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(alpha . (85 . 75)))
+(add-to-list 'default-frame-alist '(alpha-background . 100))
 (add-to-list 'default-frame-alist '(right-divider-width . 24))
 
 (use-package! winum
@@ -63,8 +63,6 @@
 (vertico-posframe-mode 1)
 
 
-
-
 (require 'dimmer)
 (dimmer-configure-which-key)
 (dimmer-configure-posframe)
@@ -80,10 +78,57 @@
   '(font-lock-keyword-face :slant italic))
 
 ;; Set theme                               ;
-(load-theme 'doom-moonlight t)
-(after! doom-themes
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
+;; (load-theme 'doom-moonlight t)
+;; (after! doom-themes
+;;   (setq doom-themes-enable-bold t
+;;         doom-themes-enable-italic t))
+(use-package! modus-themes
+  :demand
+  :init
+  (require 'modus-themes)
+
+  (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted))
+  (setq modus-themes-italic-constructs t
+            modus-themes-bold-constructs t
+            modus-themes-variable-pitch-ui t
+            modus-themes-mixed-fonts t)
+
+  ;; Color customizations
+  (setq modus-themes-prompts '(bold))
+  (setq modus-themes-completions nil)
+  (setq modus-themes-org-blocks 'tinted-background) ;'gray-background)
+
+  ;; Font sizes for titles and headings, including org
+  (setq modus-themes-headings '((1 . (light variable-pitch 1.5))
+                                (agenda-date . (1.3))
+                                (agenda-structure . (variable-pitch light 1.8))
+                                                        (t . (medium))))
+  ;; Theme overrides
+  (customize-set-variable 'modus-themes-common-palette-overrides
+                          `(
+                            ;; Make the mode-line borderless
+                            (bg-mode-line-active bg-inactive)
+                            (fg-mode-line-active fg-main)
+                            (bg-mode-line-inactive bg-inactive)
+                            (fg-mode-line-active fg-dim)
+                            (border-mode-line-active bg-inactive)
+                            (border-mode-line-inactive bg-main)
+                            ))
+  (customize-set-variable 'modus-operandi-tinted-palette-overrides
+                          `(
+                            ;; More subtle gray for the inactive window and modeline
+                            (bg-inactive "#efefef")))
+  (customize-set-variable 'modus-vivendi-tinted-palette-overrides
+                          `(
+                            ;; More subtle gray for the inactive window and modeline
+                            (bg-inactive "#202020")))
+
+  ;; Quick fix: Don't load immediately, but during after-init-hook so all other modifications further down can be prepared
+  (defun ct/modus-themes-init ()
+    (load-theme (car modus-themes-to-toggle)))
+
+  :bind ("<f5>" . modus-themes-toggle)
+  :hook (after-init . ct/modus-themes-init))
 
 
 (use-package ligature

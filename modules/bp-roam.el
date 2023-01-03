@@ -1,25 +1,34 @@
 ;; -*- lexical-binding: t; -*-
 ;; Customizations for org-roam
 
-(defvar bp/daily-note-template
-  (concat "\n\n\n\n* 🤹 Tasks\n %?"
-          "\n\n\n* 🌲 Log "
-          "\n\n\n\n* 🏁 Stand Ups"
-          "\n\n\n\n* 📓 Journal"
-          "\n\n\n\n* 🍲 Take-Aways" )
-  "Template for my daily note taking practices."
-  )
+;; (defvar bp/daily-note-template
+;;   (concat "\n\n\n\n* 🤹 Tasks\n %?"
+;;           "\n\n\n* 🌲 Log "
+;;           "\n\n\n\n* 🏁 Stand Ups"
+;;           "\n\n\n\n* 📓 Journal"
+;;           "\n\n\n\n* 🍲 Take-Aways" )
+;;   "Template for my daily note taking practices."
+;;   )
 
 (defun bp/org-roam-goto-today ()
   "Go to the current days temporal note"
   (interactive)
   (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%m-%d %a")) '(4))
                      :node (org-roam-node-create)
-                     :templates `(("d" "daily" plain ,bp/daily-note-template
+                     :templates `(("d" "daily" entry (file "~/Dropbox/org/brain/bins/templates/daily.tmp.org")
                                    :if-new (file+head "temporal/daily/%<%Y-%m-%d>.org"
                                                       ,(bp/org-roam/daily-note-header))
                                    :unnarrowed t))))
 
+(defun bp/org-roam-goto-tomorrow ()
+  "Go to the tomorrows temporal note"
+  (interactive)
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%m-%d %a")) '(4))
+                     :node (org-roam-node-create)
+                     :templates `(("d" "daily" entry (file "~/Dropbox/org/brain/bins/templates/daily.tmp.org")
+                                   :if-new (file+head "temporal/daily/%<%Y-%m-%d>.org"
+                                                      ,(bp/org-roam/daily-note-header))
+                                   :unnarrowed t))))
 
 (defun bp/org-roam-goto-month ()
   "Go to the current months temporal note"
@@ -70,7 +79,7 @@
       (progn
         (org-roam-capture- :goto nil
                            :node (org-roam-node-create)
-                           :templates '(("y" "year" plain "\n\n* Goals\n\n%?* Summary\n\n"
+                           :templates '(("y" "year" entry "\n\n* Goals\n\n%?* Summary\n\n"
                                          :if-new (file+head "temporal/yearly/%<%Y>.org"
                                                             "#+title: %<%Y>\n#+filetags: #temporal/yearly\n\n")
                                          :immediate-finish t
@@ -82,29 +91,33 @@
   (let* ((formatted-date (format-time-string "%Y %B"))
          (node (org-roam-node-from-title-or-alias (format-time-string formatted-date))))
     (if node
-        (org-link-make-string
-         (concat
-          "id:" (org-roam-node-id node))
-         (org-roam-node-title node))
+      (org-link-make-string
+       (concat
+        "id:" (org-roam-node-id node))
+       (org-roam-node-title node))
       (progn
         (org-roam-capture- :goto nil
                            :node (org-roam-node-create)
-                           :templates `(("m" "month" plain "\n\n* Goals\n\n%?* Summary\n\n"
+                           :templates `(("m" "month" entry "\n\n* Goals\n\n%?* Summary\n\n"
                                          :if-new (file+head "temporal/monthly/%<%Y-%B>.org"
                                                             ,(bp/org-roam/monthly-note-header))
-                                         :immediate-finish t
-                                         :unnarrowed t)))))))
+                                         :immediate-finish nil
+                                         :unnarrowed t)))
+        (bp/org-roam/get-monthly-note-link)))))
+
 
 (defun bp/org-roam/daily-note-header ()
   "Geneate the monthly note link for daily note header"
-  (concat "#+title: %<%Y-%m-%d %a>\n\n"
+  (concat "%<%Y-%m-%d %a>\n\n"
           "Parent :: "
-          ;; (bp/org-roam/get-monthly-note-link)
+          ;; (bp/org-roam/get-yearly-note-link)
+          ;; " :: "
+          (bp/org-roam/get-monthly-note-link)
           "\n\n"))
 
 (defun bp/org-roam/monthly-note-header ()
   "Geneate the monthly note header"
-  (concat "#+title: %<%Y %B>\n"
+  (concat "%<%Y %B>\n"
           "#+filetags: #temporal/monthly\n\n"
           "Parent :: "
           ;; (bp/org-roam/get-yearly-note-link)
@@ -150,14 +163,18 @@
                                  :if-new (file "umami/%<%Y%m%d%H%M%S>-${slug}.org"))
 
                                 ("t" "topic-node" plain
-                                 "#+title: ${title}\n#+filetags: #topic-node \n\nRelated Topics :: %? \n\n"
+                                 "#+title: ${title}\n#+filetags: topic-node \n\nRelated Topics :: %? \n\n"
                                  :if-new (file "topics/topic-${slug}.org"))
 
+                                ("c" "class notes" plain
+                                 "#+title: ${title}\n#+filetags: course-notes \n\nClass :: \nWebsite ::  \nRelated ::\n\n"
+                                 :if-new (file "umami/%<%Y%m%d%H%M%S>-${slug}.org"))
+
                                 ("s" "source" plain
-                                 "#+title: ${title}\n#+filetags: #source/%? \n\nTopics:: \nAuthor::  \nRelated ::\n\n"
+                                 "#+title: ${title}\n#+filetags: source/%? \n\nTopics :: \nAuthor ::  \nRelated ::\n\n"
                                  :if-new (file "sources/%<%Y%m%d%H%M%S>-${slug}.org"))
 
-                                ("m" "map of content" plain "#+title: ${title}\n#+filetags: #moc \n\nTopics :: %? \n\n"
+                                ("m" "map of content" plain "#+title: ${title}\n#+filetags: moc \n\nTopics :: %? \n\n"
                                  :if-new (file "maps/${slug}-moc.org")))
    org-roam-dailies-capture-templates `(("t" "task" entry
                                          "\n\n* TODO %?\n  %U\n  %a\n  %i"

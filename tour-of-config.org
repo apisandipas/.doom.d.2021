@@ -1,5 +1,6 @@
 #+title: A Tour of My Integrated Computing Environment
 
+
 * Integrated Development Environment
 - Anything you might expect from a modern IDE:
   - Syntax Highlighting.
