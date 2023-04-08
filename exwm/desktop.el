@@ -300,7 +300,10 @@ Requires polybar, instead of relying on xrandr,
         window-divider-default-right-width 2)
   (window-divider-mode)
 
-  (exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
+  (use-package app-launcher
+    :config
+    (exwm-input-set-key (kbd "s-SPC") 'app-launcher-run-app))
+
   ;; (perspective-exwm-mode)
   (exwm-enable))
 

@@ -62,4 +62,17 @@ With prefix argument (`C-u'), also kill the special buffers."
 
 (global-set-key (kbd "M-=") 'er/expand-region)
 
+
+(defvar my-themes '(doom-nano-dark doom-nano-light))
+(defvar my-current-theme 0)
+
+(defun my-toggle-theme ()
+  "Toggle between two themes."
+  (interactive)
+  (disable-theme (nth my-current-theme my-themes))
+  (setq my-current-theme (mod (1+ my-current-theme) (length my-themes)))
+  (load-theme (nth my-current-theme my-themes) t))
+
+(global-set-key (kbd "<f5>") 'my-toggle-theme)
+
 (provide 'bp-keybinds)

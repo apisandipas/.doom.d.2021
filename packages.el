@@ -24,8 +24,8 @@
 (package! visual-fill-column)
 (package! dashboard)
 (package! vertico-posframe)
-(package! dimmer)
-(package! winum)
+;; (package! dimmer)
+;; (package! winum)
 (package! ligature
   :recipe
   (:host github
@@ -35,8 +35,8 @@
 (package! prettier-js)
 
 ;; Themes
-(package! one-themes)
-(package! leuven-theme)
+;; (package! one-themes)
+;; (package! leuven-theme)
 (package! modus-themes)
 
 
@@ -66,9 +66,19 @@
   :recipe
   (:host github
    :repo "rougier/mu4e-dashboard"))
+(package! svg-lib
+  :recipe
+  (:host github
+   :repo "rougier/svg-lib"))
+(package! svg-tag-mode
+  :recipe
+  (:host github
+   :repo "rougier/svg-tag-mode"))
 
-;; Integration Related Packages
-(package! stumpwm-mode)
+
+
+  ;; Integration Related Packages
+  (package! stumpwm-mode)
 (package! engine-mode)
 (package! youtube-dl
   :recipe
@@ -91,3 +101,14 @@
    :branch "main"))
 
 (package! mastodon)
+(package! emacsql-sqlite-builtin)
+(package! org-ref)
+(package! org-roam-bibtex)
+
+(package! counsel)
+(package! app-launcher
+  :recipe
+  (:host github :repo "SebastienWae/app-launcher"))
+(package! doom-nano-modeline
+  :recipe (:host github
+  :repo "ronisbr/doom-nano-modeline"))

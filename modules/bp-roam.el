@@ -1,14 +1,6 @@
-;; -*- lexical-binding: t; -*-
+﻿;; -*- lexical-binding: t; -*-
 ;; Customizations for org-roam
 
-;; (defvar bp/daily-note-template
-;;   (concat "\n\n\n\n* 🤹 Tasks\n %?"
-;;           "\n\n\n* 🌲 Log "
-;;           "\n\n\n\n* 🏁 Stand Ups"
-;;           "\n\n\n\n* 📓 Journal"
-;;           "\n\n\n\n* 🍲 Take-Aways" )
-;;   "Template for my daily note taking practices."
-;;   )
 
 (defun bp/org-roam-goto-today ()
   "Go to the current days temporal note"
@@ -63,7 +55,7 @@
   "Create a topic node via the prompt and then insert the link without visiting it."
   (interactive "P")
   (let ((args (cons arg args))
-        (org-roam-capture-templates (list (append (second org-roam-capture-templates)
+        (org-roam-capture-templates (list (append (cdr org-roam-capture-templates)
                                                   '(:immediate-finish t)))))
     (apply #'org-roam-node-insert args)))
 
@@ -136,7 +128,9 @@
 (use-package! org-roam
   :commands (org-roam-insert org-roam-find-file org-roam org-roam-show-graph)
   :init
+  (use-package! emacsql-sqlite-builtin)
   (require 'org-roam-protocol)
+   (setq org-roam-database-connector 'sqlite-builtin)
   (setq
    org-gcal-recurring-events-mode 'nested
    org-roam-v2-ack t
@@ -163,89 +157,96 @@
                                  :if-new (file "umami/%<%Y%m%d%H%M%S>-${slug}.org"))
 
                                 ("t" "topic-node" plain
-                                 "#+title: ${title}\n#+filetags: topic-node \n\nRelated Topics :: %? \n\n"
+                                 "#+title: ${title}\n#+filetags: topic-node \n\nTopics :: %? \n\n"
                                  :if-new (file "topics/topic-${slug}.org"))
 
                                 ("c" "class notes" plain
                                  "#+title: ${title}\n#+filetags: course-notes \n\nClass :: \nWebsite ::  \nRelated ::\n\n"
                                  :if-new (file "umami/%<%Y%m%d%H%M%S>-${slug}.org"))
 
+                                ("r" "bibliography reference" plain "%?"
+                                        :target
+                                        (file+head "sources/${citekey}.org" "#+title: ${title}\n")
+                                        :unnarrowed t)
+
                                 ("s" "source" plain
-                                 "#+title: ${title}\n#+filetags: source/%? \n\nTopics :: \nAuthor ::  \nRelated ::\n\n"
+                                 "#+title: ${title}\n#+filetags: source/%? \n\nTopics :: \nAuthor :: \nPublisher :: \nPublished :: \nURL :: \nRelated ::\n\n"
                                  :if-new (file "sources/%<%Y%m%d%H%M%S>-${slug}.org"))
 
                                 ("m" "map of content" plain "#+title: ${title}\n#+filetags: moc \n\nTopics :: %? \n\n"
                                  :if-new (file "maps/${slug}-moc.org")))
-   org-roam-dailies-capture-templates `(("t" "task" entry
-                                         "\n\n* TODO %?\n  %U\n  %a\n  %i"
-                                         :if-new (file+head+olp ,bp/daily-note-filename
-                                                                ,(bp/org-roam/daily-note-header)
-                                                                ("🤹 Tasks"))
-                                         :empty-lines 1)
+   org-roam-dailies-capture-templates `(
+                                        ;; ("t" "task" entry
+                                        ;;  "\n\n* TODO %?\n  %U\n  %a\n  %i"
+                                        ;;  :if-new (file+head+olp ,bp/daily-note-filename
+                                        ;;                         ,(bp/org-roam/daily-note-header)
+                                        ;;                         ("🤹 Tasks"))
+                                        ;;  :empty-lines 1)
 
-                                        ("l" "log entry" entry
-                                         "\n\n* %<%I:%M %p> - %?\n\n"
-                                         :if-new (file+head+olp ,bp/daily-note-filename
-                                                                ,(bp/org-roam/daily-note-header)
-                                                                ("🪓 Log"))
-                                         :empty-lines 1)
+                                        ;; ("l" "log entry" entry
+                                        ;;  "\n\n* %<%I:%M %p> - %?\n\n"
+                                        ;;  :if-new (file+head+olp ,bp/daily-note-filename
+                                        ;;                         ,(bp/org-roam/daily-note-header)
+                                        ;;                         ("🪓 Log"))
+                                        ;;  :empty-lines 1)
 
-                                        ("s" "stand ups" plain
-                                         ;; "\n\n*%?\n\n"
-                                         ,(concat "\n + Yesterday - %? \n"
-                                                  "\n + Today -  \n"
-                                                  "\n + Blockers -  \n" )
-                                         :if-new (file+head+olp ,bp/daily-note-filename
-                                                                ,(bp/org-roam/daily-note-header)
-                                                                ("🏁 Stand Ups"))
+                                        ;; ("s" "stand ups" plain
+                                        ;;  ;; "\n\n*%?\n\n"
+                                        ;;  ,(concat "\n + Yesterday - %? \n"
+                                        ;;           "\n + Today -  \n"
+                                        ;;           "\n + Blockers -  \n" )
+                                        ;;  :if-new (file+head+olp ,bp/daily-note-filename
+                                        ;;                         ,(bp/org-roam/daily-note-header)
+                                        ;;                         ("🏁 Stand Ups"))
 
-                                         :empty-lines 1)
-                                        ("j" "journal" entry
-                                         "\n\n* %<%I:%M %p> - Journal  :journal:\n\n%?\n\n"
-                                         :if-new (file+head+olp ,bp/daily-note-filename
-                                                                ,(bp/org-roam/daily-note-header)
-                                                                ("📓 Journal"))
-                                         :empty-lines 1)
+                                        ;;  :empty-lines 1)
+                                        ;; ("j" "journal" entry
+                                        ;;  "\n\n* %<%I:%M %p> - Journal  :journal:\n\n%?\n\n"
+                                        ;;  :if-new (file+head+olp ,bp/daily-note-filename
+                                        ;;                         ,(bp/org-roam/daily-note-header))
+                                        ;;  (     ("📓 Journal"))
+                                        ;;  :empty-lines 1)
 
-                                        ("w" "take-away" entry
-                                         "\n\n* %?\n\n"
-                                         :if-new (file+head+olp ,bp/daily-note-filename
-                                                                ,(bp/org-roam/daily-note-header)
-                                                                ("🥡 Take-Aways"))
+                                        ;; ("w" "take-away" entry
+                                        ;;  "\n\n* %?\n\n"
+                                        ;;  :if-new (file+head+olp ,bp/daily-note-filename
+                                        ;;                         ,(bp/org-roam/daily-note-header)
+                                        ;;                         ("🥡 Take-Aways"))
 
-                                         :empty-lines 1)
-                                        ("a" "appointment" entry
-                                         "\n\n* %<%I:%M %p> - %^{Meeting Title}  :appointment:\n\n%?\n\n"
-                                         :if-new (file+head+olp ,bp/daily-note-filename
-                                                                ,(bp/org-roam/daily-note-header)
-                                                                ("🪓 Log"))
-                                         :empty-lines 1)
-                                        )))
+                                        ;;  :empty-lines 1)
+                                        ;; ("a" "appointment" entry
+                                        ;;  "\n\n* %<%I:%M %p> - %^{Meeting Title}  :appointment:\n\n%?\n\n"
+                                        ;;  :if-new (file+head+olp ,bp/daily-note-filename
+                                        ;;                         ,(bp/org-roam/daily-note-header)
+                                        ;;                         ("🪓 Log"))
+                                        ;;  :empty-lines 1)
+                                         )
+                                        ))
 
-(defhydra bp/org-roam-jump-menu (:exit t)
-  "
-^Jump To Day^    ^Capture^       ^Periodic^
-^^^^^^^^-------------------------------------------------
-_t_: today       _T_: today       _m_: current month
-_r_: tomorrow    _R_: tomorrow    _e_: current year
-_y_: yesterday   _Y_: yesterday   ^ ^
-_d_: date        ^ ^              ^ ^
-"
-  ("t" bp/org-roam-goto-today)
-  ("r" org-roam-dailies-goto-tomorrow)
-  ("y" org-roam-dailies-goto-yesterday)
-  ("d" org-roam-dailies-goto-date)
-  ("T" org-roam-dailies-capture-today)
-  ("R" org-roam-dailies-capture-tomorrow)
-  ("Y" org-roam-dailies-capture-yesterday)
-  ("m" bp/org-roam-goto-month)
-  ("e" bp/org-roam-goto-year)
-  ("q" nil "cancel"))
+;;(defhydra bp/org-roam-jump-menu (:exit t)
+;;   "
+;; ^Jump To Day^    ^Capture^       ^Periodic^
+;; ^^^^^^^^-------------------------------------------------
+;; _t_: today       _T_: today       _m_: current month
+;; _r_: tomorrow    _R_: tomorrow    _e_: current year
+;; _y_: yesterday   _Y_: yesterday   ^ ^
+;; _d_: date        ^ ^              ^ ^
+;; "
+;;   ("t" bp/org-roam-goto-today)
+;;   ("r" org-roam-dailies-goto-tomorrow)
+;;   ("y" org-roam-dailies-goto-yesterday)
+;;   ("d" org-roam-dailies-goto-date)
+;;   ("T" org-roam-dailies-capture-today)
+;;   ("R" org-roam-dailies-capture-tomorrow)
+;;   ("Y" org-roam-dailies-capture-yesterday)
+;;   ("m" bp/org-roam-goto-month)
+;;   ("e" bp/org-roam-goto-year)
+;;   ("q" nil "cancel"))
 
-(map! :leader
-      :prefix ("n" "notes")
-      :desc "Journal Manager"
-      "j" #'bp/org-roam-jump-menu/body)
+;; (map! :leader
+;;       :prefix ("n" "notes")
+;;       :desc "Journal Manager"
+;;       "j" #'bp/org-roam-jump-menu/body)
 
 (use-package! websocket
   :after org-roam)
@@ -258,5 +259,22 @@ _d_: date        ^ ^              ^ ^
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start nil))
+
+
+(use-package org-ref
+  :config
+  (setq
+   bibtex-completion-bibliography '("~/Dropbox/org/bibtex.bib")
+   bibtex-completion-notes-path "~/Dropbox/org/brain/umami"
+   bibtex-completion-pdf-field "file"
+   bibtex-completion-pdf-open-function
+   (lambda (fpath)
+     (call-process "firefox" nil 0 nil fpath))))
+
+(use-package org-roam-bibtex
+  :after org-roam
+  :config
+  (require 'org-ref))
+
 
 (provide 'bp-roam)

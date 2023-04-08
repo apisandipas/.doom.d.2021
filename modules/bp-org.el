@@ -79,52 +79,54 @@
 (org-babel-do-load-languages
  'org-babel-load-languages '((typescript . t)))
 
-(setq org-agenda-custom-commands
-     '(("c" . "📦 Contexts")
-      ("ch" "🏥 Health" tags-todo "Health")
-      ("cs" "👳 Self" tags-todo "Self")
-      ("cl" "💏 Love" tags-todo "Love")
-      ("cH" "🏠 Home" tags-todo "Home")
-      ("cC" "🏙 Community" tags-todo "Community")
-      ("A" "📅 Appointments" tags-todo "appointment")
-      ("B" "💸 Bills" tags-todo "bill")
-      ("C" "💦 Chores" tags-todo "chore")
-      ("g" "👷🏼‍ GTD"
-        ((todo "Health")
-        (todo "Self")
-        (todo "Love")
-        (todo "Home")
-        (todo "Community")))
-      ("f" "💎 FACETS"
-        ((tags-todo "Health")
-        (tags-todo "Self")
-        (tags-todo "Love")
-        (tags-todo "Home")
-        (tags-todo "Community")))))
+(use-package! org
+  :config
+  (setq org-agenda-custom-commands
+        '(("c" . "📦 Contexts")
+          ("ch" "🏥 Health" tags-todo "Health")
+          ("cs" "👳 Self" tags-todo "Self")
+          ("cl" "💏 Love" tags-todo "Love")
+          ("cH" "🏠 Home" tags-todo "Home")
+          ("cC" "🏙 Community" tags-todo "Community")
+          ("A" "📅 Appointments" tags-todo "appointment")
+          ("B" "💸 Bills" tags-todo "bill")
+          ("C" "💦 Chores" tags-todo "chore")
+          ("g" "👷🏼‍ GTD"
+           ((todo "Health")
+            (todo "Self")
+            (todo "Love")
+            (todo "Home")
+            (todo "Community")))
+          ("f" "💎 FACETS"
+           ((tags-todo "Health")
+            (tags-todo "Self")
+            (tags-todo "Love")
+            (tags-todo "Home")
+            (tags-todo "Community")))))
 
 
-(setq org-tag-alist '(("URGENT" . ?u)
-                ("Health" . ?h)
-                ("Self" . ?s)
-                ("Love" . ?l)
-                ("Home" . ?h)
-                ("Family" . ?f)
-                ("Community" . ?c)
-                ("project" . ?P)
-                ("task" . ?T)
-                ("chore" . ?C)
-                ("bill" . ?B)
-                ("appointment" . ?A)
-                ))
+  (setq org-tag-alist '(("URGENT" . ?u)
+                        ("Health" . ?h)
+                        ("Self" . ?s)
+                        ("Love" . ?l)
+                        ("Home" . ?h)
+                        ("Family" . ?f)
+                        ("Community" . ?c)
+                        ("project" . ?P)
+                        ("task" . ?T)
+                        ("chore" . ?C)
+                        ("bill" . ?B)
+                        ("appointment" . ?A)
+                        ))
 
-(setq org-todo-keywords
+  (setq org-todo-keywords
         '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "LOOP(l)" "|" "CANCELLED(C)" "|" "DONE(d)")
-          (type "[ ](c)" "PROJ(p)" "SOMEDAY(s)" "LOOP(r)" "|" "[x](x)")))
+          (type "[ ](c)" "|" "[x](x)")))
 
-(setq org-capture-templates
+  (setq org-capture-templates
         ;; Generic todo entry
         `(("t" "Todo" entry (file+headline "inbox.org" "Todos Inbox")
-           ,(concat "* [ ] %?\n"
+           ,(concat "* TODO %?\n"
                     "/Entered on/ %U"))
 
           ;; User by Org protocol to capture a note to the inbox
@@ -150,17 +152,18 @@
            ,(concat "* TODO Reply to \"%a\" %?\n"
                     "/Entered on/ %U"))))
 
+  )
 ;; ;;; NOTE: this is the only way in which i could get this working
 ;; (require 'org-superstar)
 ;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
-(use-package org-superstar
+(use-package! org-superstar
+  :hook (org-mode . org-superstar-mode)
   :config
-  (setq org-superstar-item-bullet-alist '((?+ . ?✦) (?- . ?➤)))
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+  (setq org-superstar-item-bullet-alist '((?+ . ?✦) (?- . ?➤))))
 
 (use-package! org-super-agenda
-  :commands org-super-agenda-mode
+  :commands org-agenda-mode
   :init
   (setq org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
@@ -190,7 +193,6 @@
         org-gcal-fetch-file-alist '(
                                     ("bparonto@gmail.com" .  "~/org/agenda.org")
                                     ("4tc3t9c2hef41n7dc461idql8k@group.calendar.google.com". "~/org/agenda.org"))))
-
 
 
 (provide 'bp-org)
