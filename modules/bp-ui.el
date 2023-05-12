@@ -34,7 +34,7 @@
   "Set the initial look and feel of the frame."
   (modify-all-frames-parameters
    '((right-divider-width . 24)
-     (alpha-background . 100)
+     (alpha-background . 50)
      (mouse-color . "white")
      (internal-border-width . 24))))
 
@@ -44,6 +44,7 @@
                             (internal-border-width . 24)
                             (left-fringe . 0)
                             (right-fringe . 0)
+                            (alpha-background . 80)
                             (tool-bar-lines . 0)
                             (menu-bar-lines . 0)))
 
@@ -150,7 +151,7 @@
   (popper-echo-mode +1))
 
 (use-package! svg-tag-mode
-  :hook (org-mode. svg-tag-mode)
+  :hook (org-mode . svg-tag-mode)
   :config
   (use-package! svg-lib)
   (setq svg-tag-tags
@@ -183,6 +184,7 @@
         ;; TODO / DONE
         ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 0))))
         ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0))))
+        ("CANCELLED" . ((lambda (tag) (svg-tag-make "CANCELLED" :face 'org-done :margin 0))))
 
 
         ;; Citation of the form [cite:@Knuth:1984]

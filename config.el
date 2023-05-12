@@ -7,24 +7,33 @@
 
 (after! doom-themes
   ;; (setq doom-theme 'doom-nano-dark)
-  (load-theme 'doom-nano-dark t)
+  (load-theme 'doom-palenight t)
+  ;; (load-theme 'doom-nano-dark t)
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  (set-face-attribute 'default nil :family "Roboto Mono" :weight 'light :height 120)
-  (set-face-attribute 'bold nil :family "Roboto Mono" :weight 'regular)
-  (set-face-attribute 'italic nil :family "Victor Mono" :weight 'semilight :slant 'italic)
-  (set-fontset-font t 'unicode (font-spec :name "Inconsolata Light" :size 12) nil)
-  (set-fontset-font t '(#xe000 . #xffdd) (font-spec :name "RobotoMono Nerd Font" :size 12) nil))
+  ;; (set-face-attribute 'default nil :family "Roboto Mono" :weight 'light :height 120)
+  ;; (set-face-attribute 'bold nil :family "Roboto Mono" :weight 'regular)
+  ;; (set-face-attribute 'italic nil :family "Victor Mono" :weight 'semilight :slant 'italic)
+  ;; (set-fontset-font t 'unicode (font-spec :name "Inconsolata Light" :size 16) nil)
+  ;; (set-fontset-font t '(#xe000 . #xffdd) (font-spec :name "RobotoMono Nerd Font" :size 16) nil)
+  )
+
+(setq doom-font (font-spec :family "Victor Mono" :size 16)
+      doom-variable-pitch-font (font-spec :family "Victor Mono")
+      ;; doom-unicode-font (font-spec :family "Inconsolata Light")
+      doom-big-font (font-spec :family "Victor Mono" :size 24))
 
 (use-package! doom-nano-modeline
   :config
-  (doom-nano-modeline-mode 1)
-  (global-hide-mode-line-mode 1))
+  ;; (doom-modeline t)
+  (setq doom-modeline-height 36)
+  (doom-nano-modeline-mode 1))
 
 (require 'bp-keybinds)
 (require 'bp-ui)
 (require 'bp-org)
 (require 'bp-roam)
+(require 'bp-roam-dailies)
 (require 'bp-rss)
 ;; (require 'bp-mastodon)
 ;; (require 'bp-email)
@@ -32,30 +41,30 @@
 ;; (require 'bp-presentations)
 ;; (require 'emacs-with-nyxt)
 
-;; (use-package! eshell
-;;   :config
-;;   (setq eshell-rc-script "~/.doom.d/eshell/profile"
-;;         eshell-aliases-file "~/.doom.d/eshell/aliases"
-;;         eshell-history-size 5000
-;;         eshell-buffer-maximum-lines 5000
-;;         eshell-hist-ignoredups t
-;;         eshell-scroll-to-bottom-on-input t
-;;         eshell-destroy-buffer-when-process-dies t))
+(use-package! eshell
+  :config
+  (setq eshell-rc-script "~/.doom.d/eshell/profile"
+        eshell-aliases-file "~/.doom.d/eshell/aliases"
+        eshell-history-size 5000
+        eshell-buffer-maximum-lines 5000
+        eshell-hist-ignoredups t
+        eshell-scroll-to-bottom-on-input t
+        eshell-destroy-buffer-when-process-dies t))
 
-;; (setq inferior-lisp-program "sbcl"
-;;       web-mode-markup-indent-offset 2
-;;       web-mode-code-indent-offset 2
-;;       web-mode-css-indent-offset 2
-;;       mac-command-modifier 'meta
-;;       js-indent-level 2
-;;       typescript-indent-level 2
-;;       json-reformat:indent-width 2
-;;       prettier-js-args '("--double-quote"))
+(setq inferior-lisp-program "sbcl"
+      web-mode-markup-indent-offset 2
+      web-mode-code-indent-offset 2
+      web-mode-css-indent-offset 2
+      mac-command-modifier 'meta
+      js-indent-level 2
+      typescript-indent-level 2
+      json-reformat:indent-width 2
+      prettier-js-args '("--double-quote"))
 
-;; (add-hook 'js2-mode-hook 'prettier-js-mode)
-;; (add-hook 'typescript-mode-hook 'prettier-js-mode)
-;; (add-hook 'typescript-tsx-mode-hook 'prettier-js-mode)
-;; (add-hook 'web-mode-hook 'prettier-js-mode)
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'typescript-mode-hook 'prettier-js-mode)
+(add-hook 'typescript-tsx-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
 
 ;; (after! circe
 ;;   (set-irc-server! "irc.libera.chat"

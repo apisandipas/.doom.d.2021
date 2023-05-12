@@ -35,7 +35,20 @@
    '(org-level-4 ((t (:inherit outline-4 :height 1.2 ))))
    '(org-level-5 ((t (:inherit outline-5 :height 1.0 ))))))
 
+
 (add-hook! org-mode #'bp/org-font-setup)
+
+(defun bp/markdown-font-setup ()
+  (custom-set-faces
+   '(mardown-header-face-1 ((t (:inherit outline-1 :height 1.5))))
+   '(mardown-header-face-2 ((t (:inherit outline-2 :height 1.4 ))))
+   '(mardown-header-face-3 ((t (:inherit outline-3 :height 1.3 ))))
+   '(mardown-header-face-4 ((t (:inherit outline-4 :height 1.2 ))))
+   '(mardown-header-face-5 ((t (:inherit outline-5 :height 1.0 ))))))
+
+
+(add-hook! markdown-mode #'bp/markdown-font-setup)
+
 
 ;;;;; Ligatures & Pretty Symbols
 (defun bp/org-prettify-symbols ()
@@ -120,8 +133,7 @@
                         ))
 
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "LOOP(l)" "|" "CANCELLED(C)" "|" "DONE(d)")
-          (type "[ ](c)" "|" "[x](x)")))
+        '((sequence "TODO(t)" "|" "CANCELLED(C)" "|" "DONE(d)")))
 
   (setq org-capture-templates
         ;; Generic todo entry
