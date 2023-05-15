@@ -69,25 +69,41 @@
     "Create a daily note using a template file."
     (interactive)
     (let* ((template-file (concat org-roam-directory "/bins/templates/" template-name ".tmp.org"))
-           ;; (title (format-time-string "%Y-%m-%d"))
            (file (concat org-roam-directory "/temporal/" template-name "/" filename ".org"))
-           (link-to-parent (parent-link parent date))
+           ;; (link-to-parent (parent-link parent date))
            (org-id-overriding-file-name file)
            id)
+      (cond
+       ((string-equal "daily" template-name) (org-roam-daily-note "monthly"
+                                                  (format-time-string "%Y-%B" (current-time))
+                                                  (format-time-string "%B %Y" (current-time))
+                                                  "%Y"
+                                                  nil
+                                                  (current-time) ))
+       ((string-equal "monthly" template-name) (org-roam-daily-note "yearly"
+                                                    (format-time-string "%Y" (current-time))
+                                                    (format-time-string "%Y" (current-time))
+                                                    ""
+                                                    nil
+                                                    (current-time) )))
       (unless (file-exists-p file)
         (with-temp-buffer
-          (insert
-           (concat ":PROPERTIES:\n:ID:        \n:END:\n"
-                   "#+title: " title " \n\n"
-                   "Parent :: " link-to-parent "\n\n"
-                   ))
-          (goto-char 25)
-          (setq id (org-id-get-create))
-          (goto-line 8)
-          (insert-file-contents template-file)
-          (write-file file)
-          (org-roam-db-update-file file)
-          (format "[[id:%s][%s]]" id title)))
+          (let* ((link-to-parent (if (string-equal "yearly" template-name)
+                      "[[id:ee48e0b8-14c0-4c57-a24c-e8248fdca288][Temporal MOC]]"
+                     (parent-link parent date))))
+            (insert
+             (concat ":PROPERTIES:\n:ID:        \n:END:\n"
+                     "#+title: " title " \n\n"
+                     "Parent :: " link-to-parent "\n\n"
+                     ))
+            (goto-char 25)
+            (setq id (org-id-get-create))
+            (goto-line 8)
+            (insert-file-contents template-file)
+            (write-file file)
+            (org-roam-db-update-file file)
+            (format "[[id:%s][%s]]" id title)))
+            )
       (if open (find-file file))
 
       ))
@@ -162,12 +178,7 @@
     (let* ((node (bp/get-roam-node-by-format-and-date format date)))
       (if node
           (bp/get-roam-link node)
-        "No Parent")))
-
-
-  )
-
-(parent-link "%B %Y")
+        "No Parent"))))
 
 
 (provide 'bp-roam-dailies)
